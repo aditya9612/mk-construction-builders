@@ -1,0 +1,66 @@
+/**
+ * House plan categories.
+ * Area/price details remain on request until confirmed.
+ */
+export const housePlans = [
+  {
+    id: '1bhk',
+    title: '1 BHK',
+    image: '/images/plans/1bhk.svg',
+    area: null,
+    rooms: '1 Bedroom, Hall, Kitchen',
+    floors: null,
+    description: 'Compact 1 BHK layout discussion available on request.',
+    detailsLabel: 'Details available on request',
+  },
+  {
+    id: '2bhk',
+    title: '2 BHK',
+    image: '/images/plans/2bhk.svg',
+    area: null,
+    rooms: '2 Bedrooms, Hall, Kitchen',
+    floors: null,
+    description: 'Practical 2 BHK planning options for residential builds.',
+    detailsLabel: 'Details available on request',
+  },
+  {
+    id: '3bhk',
+    title: '3 BHK',
+    image: '/images/plans/3bhk.svg',
+    area: null,
+    rooms: '3 Bedrooms, Hall, Kitchen',
+    floors: null,
+    description: 'Spacious 3 BHK concepts for growing families.',
+    detailsLabel: 'Details available on request',
+  },
+  {
+    id: '4bhk',
+    title: '4 BHK',
+    image: '/images/plans/4bhk.svg',
+    area: null,
+    rooms: '4 Bedrooms, Hall, Kitchen',
+    floors: null,
+    description: 'Extended 4 BHK layouts for larger residential requirements.',
+    detailsLabel: 'Details available on request',
+  },
+  {
+    id: 'duplex',
+    title: 'Duplex',
+    image: '/images/plans/duplex.svg',
+    area: null,
+    rooms: 'Configurable',
+    floors: 'Multi-level',
+    description: 'Duplex planning with flexible floor coordination.',
+    detailsLabel: 'Details available on request',
+  },
+  {
+    id: 'bungalow',
+    title: 'Bungalow',
+    image: '/images/plans/bungalow.svg',
+    area: null,
+    rooms: 'Custom',
+    floors: 'Configurable',
+    description: 'Custom bungalow planning aligned to site and requirements.',
+    detailsLabel: 'Details available on request',
+  },
+]

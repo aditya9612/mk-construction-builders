@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="64" viewBox="0 0 240 64">
+  <rect width="240" height="64" fill="none"/>
+  <rect x="0" y="8" width="48" height="48" rx="4" fill="#0b1c2c"/>
+  <text x="24" y="40" text-anchor="middle" fill="#d4a84b" font-family="Georgia, serif" font-size="20" font-weight="700">MK</text>
+  <text x="60" y="30" fill="#0b1c2c" font-family="Georgia, serif" font-size="18" font-weight="600">MK Construction</text>
+  <text x="60" y="48" fill="#a67622" font-family="Arial, sans-serif" font-size="11" letter-spacing="2">&amp; BUILDERS</text>
+</svg>
