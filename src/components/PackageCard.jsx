@@ -11,7 +11,7 @@ export default function PackageCard({ pkg, index = 0 }) {
       viewport={{ once: true }}
       transition={{ delay: index * 0.08, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
-        'relative flex flex-col p-6 sm:p-8 md:p-9 h-full min-w-0 w-full transition-shadow duration-500',
+        'relative flex flex-col p-6 sm:p-8 md:p-9 h-full min-w-0 w-full transition-shadow duration-500 rounded-[14px] sm:rounded-none',
         pkg.highlighted && 'pt-8 sm:pt-9',
         pkg.highlighted
           ? 'bg-navy-900 text-stone-50 shadow-[var(--shadow-lift)] ring-1 ring-gold-500'
@@ -23,12 +23,12 @@ export default function PackageCard({ pkg, index = 0 }) {
           Popular
         </span>
       )}
-      <h3 className="font-display text-[1.65rem] sm:text-[1.85rem] md:text-[2rem] font-semibold break-words">
+      <h3 className="font-display text-[1.5rem] sm:text-[1.85rem] md:text-[2rem] font-semibold break-words">
         {pkg.name}
       </h3>
       <p
         className={cn(
-          'mt-3 text-[14px] leading-relaxed',
+          'mt-3 text-[14px] sm:text-[15px] leading-relaxed',
           pkg.highlighted ? 'text-stone-300/90' : 'text-navy-700/70',
         )}
       >
@@ -55,7 +55,7 @@ export default function PackageCard({ pkg, index = 0 }) {
       <Link
         to="/request-quote"
         className={cn(
-          'mt-9 inline-flex justify-center text-[12px] uppercase tracking-[0.14em] font-medium px-5 py-3.5 transition',
+          'package-cta mt-9 inline-flex justify-center items-center text-[12px] uppercase tracking-[0.14em] font-medium px-5 py-3.5 transition min-h-[50px]',
           pkg.highlighted
             ? 'bg-gold-500 text-navy-950 hover:bg-gold-400'
             : 'bg-navy-900 text-stone-50 hover:bg-navy-800',

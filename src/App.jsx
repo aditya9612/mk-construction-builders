@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
+import MobileActionBar from './components/MobileActionBar'
 import ScrollToTop from './components/ScrollToTop'
 import Home from './pages/Home'
 import About from './pages/About'
@@ -37,7 +38,7 @@ export default function App() {
   const location = useLocation()
 
   return (
-    <div className="min-h-screen flex flex-col w-full min-w-0 overflow-x-clip">
+    <div className="app-shell min-h-screen flex flex-col w-full min-w-0 overflow-x-clip">
       <ScrollToTop />
       <Navbar />
       <main className="flex-1 w-full min-w-0">
@@ -81,6 +82,7 @@ export default function App() {
       </main>
       <Footer />
       <WhatsAppButton />
+      <MobileActionBar />
     </div>
   )
 }

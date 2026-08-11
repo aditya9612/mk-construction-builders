@@ -13,71 +13,75 @@ export default function Contact() {
       />
       <section className="section-pad">
         <div className="container-arch grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 min-w-0">
-          <div className="bg-navy-950 text-stone-100 p-6 sm:p-7 md:p-8 min-w-0">
-            <h2 className="font-display text-2xl sm:text-3xl font-semibold break-words">
+          <div className="bg-navy-950 text-stone-100 p-6 sm:p-7 md:p-8 min-w-0 rounded-[14px] sm:rounded-none">
+            <h2 className="font-display text-[1.65rem] sm:text-3xl font-semibold break-words leading-snug">
               {company.name}
             </h2>
             <p className="mt-3 text-gold-400 italic font-display text-lg break-words">
               {company.tagline}
             </p>
-            <dl className="mt-8 space-y-5 text-sm">
+            <dl className="mt-8 space-y-6 text-sm">
               <div>
-                <dt className="uppercase tracking-wider text-stone-400 text-xs">
-                  Contact Number
+                <dt className="uppercase tracking-[0.16em] text-stone-400 text-[11px]">
+                  Phone
                 </dt>
-                <dd className="mt-1 text-stone-200 break-words">
+                <dd className="mt-2 text-stone-200 break-words">
                   <a
                     href={`tel:${company.phone}`}
-                    className="hover:text-gold-400 transition"
+                    className="inline-flex min-h-11 items-center hover:text-gold-400 transition text-[15px]"
                   >
                     {company.displayPhone}
                   </a>
                 </dd>
               </div>
               <div>
-                <dt className="uppercase tracking-wider text-stone-400 text-xs">
+                <dt className="uppercase tracking-[0.16em] text-stone-400 text-[11px]">
                   WhatsApp
                 </dt>
-                <dd className="mt-1 text-stone-200 break-words">
+                <dd className="mt-2 text-stone-200 break-words">
                   <a
                     href={`https://wa.me/${company.whatsapp}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:text-gold-400 transition"
+                    className="inline-flex min-h-11 items-center hover:text-gold-400 transition text-[15px]"
                   >
                     {company.displayPhone}
                   </a>
                 </dd>
               </div>
               <div>
-                <dt className="uppercase tracking-wider text-stone-400 text-xs">
+                <dt className="uppercase tracking-[0.16em] text-stone-400 text-[11px]">
                   Email
                 </dt>
-                <dd className="mt-1 text-stone-200 break-words">
+                <dd className="mt-2 text-stone-200 break-words">
                   <a
                     href={`mailto:${company.email}`}
-                    className="hover:text-gold-400 transition"
+                    className="inline-flex min-h-11 items-center hover:text-gold-400 transition text-[15px] break-all"
                   >
                     {company.email}
                   </a>
                 </dd>
               </div>
               <div>
-                <dt className="uppercase tracking-wider text-stone-400 text-xs">
-                  Address
+                <dt className="uppercase tracking-[0.16em] text-stone-400 text-[11px]">
+                  Location
                 </dt>
-                <dd className="mt-1 text-stone-200 break-words">{company.address}</dd>
+                <dd className="mt-2 text-stone-200 break-words text-[15px] leading-relaxed">
+                  Projects across {company.city}
+                  <br />
+                  {company.address}
+                </dd>
               </div>
               <div>
-                <dt className="uppercase tracking-wider text-stone-400 text-xs">
+                <dt className="uppercase tracking-[0.16em] text-stone-400 text-[11px]">
                   Instagram
                 </dt>
-                <dd className="mt-1">
+                <dd className="mt-2">
                   <a
                     href={company.instagramUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gold-400 hover:text-gold-300 break-words"
+                    className="inline-flex min-h-11 items-center text-gold-400 hover:text-gold-300 break-words"
                   >
                     {company.instagram}
                   </a>
@@ -90,7 +94,7 @@ export default function Contact() {
             </p>
           </div>
           <div className="min-w-0">
-            <h2 className="font-display text-2xl sm:text-3xl text-navy-900 font-semibold mb-6 break-words">
+            <h2 className="font-display text-[1.65rem] sm:text-3xl text-navy-900 font-semibold mb-6 break-words">
               Enquiry Form
             </h2>
             <ContactForm />

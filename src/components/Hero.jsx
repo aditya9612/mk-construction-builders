@@ -23,18 +23,18 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative min-h-[100svh] flex items-end bg-navy-950">
+    <section className="hero-section relative flex items-end bg-navy-950">
       <div className="absolute inset-0 overflow-hidden">
         <motion.img
           src={company.images.hero}
           alt="Modern residential construction by MK Construction & Builders"
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover object-center max-md:object-[center_30%]"
           initial={{ scale: 1.08 }}
           animate={{ scale: 1 }}
           transition={{ duration: 8, ease: [0.16, 1, 0.3, 1] }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(105deg,rgba(5,10,16,0.92)_0%,rgba(5,10,16,0.72)_42%,rgba(5,10,16,0.35)_100%)]" />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/25 to-navy-950/20" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,10,16,0.55)_0%,rgba(5,10,16,0.72)_42%,rgba(5,10,16,0.94)_100%)] md:bg-[linear-gradient(105deg,rgba(5,10,16,0.92)_0%,rgba(5,10,16,0.72)_42%,rgba(5,10,16,0.35)_100%)]" />
+        <div className="absolute inset-0 hidden md:block bg-gradient-to-t from-navy-950 via-navy-950/25 to-navy-950/20" />
         <div className="absolute inset-0 grain" />
       </div>
 
@@ -43,14 +43,26 @@ export default function Hero() {
         className="pointer-events-none absolute inset-y-0 left-[8%] hidden lg:block w-px bg-gradient-to-b from-transparent via-gold-500/35 to-transparent"
       />
 
-      <div className="relative z-10 container-arch w-full min-w-0 pb-10 pt-24 sm:pt-28 md:pb-14 md:pt-32 lg:pb-16 lg:pt-36">
+      <div className="hero-content relative z-10 container-arch w-full min-w-0">
         <div className="max-w-4xl min-w-0 w-full">
+          {/* Mobile: compact eyebrow brand */}
           <motion.p
             custom={0.05}
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="font-display text-xl sm:text-3xl md:text-4xl text-stone-50/95 font-medium tracking-[0.01em] break-words max-w-full"
+            className="md:hidden text-[11px] sm:text-[12px] uppercase tracking-[0.18em] text-gold-400 mb-3"
+          >
+            {company.name}
+          </motion.p>
+
+          {/* Desktop: large brand mark */}
+          <motion.p
+            custom={0.05}
+            variants={fadeUp}
+            initial="hidden"
+            animate="show"
+            className="hidden md:block font-display text-3xl lg:text-4xl text-stone-50/95 font-medium tracking-[0.01em] break-words max-w-full"
           >
             {company.name}
           </motion.p>
@@ -60,10 +72,10 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-3 mb-4 sm:mb-5 flex items-center gap-3 sm:gap-4 min-w-0"
+            className="mb-4 sm:mb-5 flex items-center gap-3 sm:gap-4 min-w-0 md:mt-3"
           >
             <span className="arch-rule" />
-            <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-gold-400 break-words">
+            <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-gold-400/90 break-words">
               Pune · Trust · Quality · On-Time
             </span>
           </motion.div>
@@ -73,11 +85,11 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="font-display text-4xl leading-tight sm:text-5xl md:text-6xl lg:text-[4.5rem] text-stone-50 font-semibold max-w-full break-words text-balance"
+            className="hero-heading font-display text-stone-50 font-semibold max-w-full break-words text-balance"
           >
             Building Dreams,
-            <br className="hidden sm:block" />
-            <span className="text-gold-400 italic font-medium"> Creating Futures.</span>
+            <br />
+            <span className="text-gold-400 italic font-medium">Creating Futures.</span>
           </motion.h1>
 
           <motion.p
@@ -85,7 +97,7 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-4 sm:mt-5 max-w-xl text-[15px] md:text-base text-stone-300/95 leading-relaxed break-words"
+            className="hero-sub mt-4 sm:mt-5 max-w-xl text-stone-300/95 leading-relaxed break-words"
           >
             {company.heroSubheading}
           </motion.p>
@@ -95,13 +107,13 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-5 sm:mt-6 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 w-full"
+            className="mt-6 sm:mt-7 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 w-full"
           >
-            <Link to="/projects" className="btn-primary w-full sm:w-auto">
+            <Link to="/projects" className="btn-primary w-full sm:w-auto min-h-[50px]">
               Explore Our Projects
               <ArrowRight className="h-4 w-4 shrink-0" />
             </Link>
-            <Link to="/request-quote" className="btn-secondary w-full sm:w-auto">
+            <Link to="/request-quote" className="btn-secondary w-full sm:w-auto min-h-[50px]">
               Get Free Quote
             </Link>
           </motion.div>
@@ -111,11 +123,11 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3"
+            className="mt-5 hidden sm:flex flex-wrap items-center gap-x-6 gap-y-3"
           >
             <a
               href={`tel:${company.phone}`}
-              className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-stone-300 hover:text-gold-400 transition"
+              className="inline-flex items-center gap-2 min-h-11 text-[12px] uppercase tracking-[0.16em] text-stone-300 hover:text-gold-400 transition"
             >
               <Phone className="h-3.5 w-3.5 shrink-0" />
               Call Now
@@ -124,7 +136,7 @@ export default function Hero() {
             <button
               type="button"
               onClick={handleWhatsApp}
-              className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-stone-300 hover:text-gold-400 transition"
+              className="inline-flex items-center gap-2 min-h-11 text-[12px] uppercase tracking-[0.16em] text-stone-300 hover:text-gold-400 transition"
             >
               <MessageCircle className="h-3.5 w-3.5 shrink-0" />
               WhatsApp
@@ -136,7 +148,7 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mt-5 sm:mt-6 max-w-lg text-base md:text-lg text-stone-400/90 font-display italic leading-relaxed break-words"
+            className="mt-5 sm:mt-6 max-w-lg text-[15px] md:text-lg text-stone-400/90 font-display italic leading-relaxed break-words"
           >
             {company.marathiTagline}
           </motion.p>

@@ -9,9 +9,9 @@ export default function ServiceCard({ service, index = 0 }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ delay: index * 0.06, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative flex flex-col min-w-0 w-full overflow-hidden bg-stone-50 border border-stone-200/80 transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]"
+      className="group relative flex flex-col min-w-0 w-full overflow-hidden bg-stone-50 border border-stone-200/80 rounded-[14px] sm:rounded-none transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]"
     >
-      <div className="relative h-52 overflow-hidden">
+      <div className="relative aspect-[4/3] overflow-hidden">
         <img
           src={service.image}
           alt={service.title}
@@ -23,11 +23,14 @@ export default function ServiceCard({ service, index = 0 }) {
           0{index + 1}
         </span>
       </div>
-      <div className="flex flex-1 flex-col p-5 sm:p-6 md:p-7 min-w-0">
-        <h3 className="font-display text-[1.45rem] sm:text-[1.65rem] text-navy-900 font-semibold leading-snug break-words">
+      <div className="flex flex-1 flex-col p-6 sm:p-6 md:p-7 min-w-0">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-gold-600 mb-2">
+          Service
+        </p>
+        <h3 className="font-display text-[1.35rem] sm:text-[1.65rem] text-navy-900 font-semibold leading-snug break-words">
           {service.title}
         </h3>
-        <p className="mt-3 text-[14px] text-navy-700/70 leading-relaxed line-clamp-3 break-words">
+        <p className="mt-3 text-[14px] sm:text-[15px] text-navy-700/70 leading-relaxed line-clamp-3 break-words">
           {service.description}
         </p>
         {service.features?.length > 0 && (
@@ -42,7 +45,7 @@ export default function ServiceCard({ service, index = 0 }) {
         )}
         <Link
           to={`/services/${service.id}`}
-          className="mt-auto pt-6 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.18em] font-medium text-navy-900 group-hover:text-gold-600 transition-colors"
+          className="mt-auto pt-6 inline-flex items-center gap-1.5 min-h-11 text-[11px] uppercase tracking-[0.18em] font-medium text-navy-900 group-hover:text-gold-600 transition-colors"
         >
           View service
           <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

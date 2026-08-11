@@ -52,21 +52,21 @@ export default function About() {
             </div>
           </div>
 
-          <div className="mt-16 grid md:grid-cols-2 gap-6">
-            <div className="border border-stone-200 bg-white p-7">
-              <h3 className="font-display text-2xl text-navy-900 font-semibold">
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+            <div className="border border-stone-200 bg-white p-6 sm:p-7 rounded-[14px] sm:rounded-none">
+              <h3 className="font-display text-[1.5rem] sm:text-2xl text-navy-900 font-semibold">
                 Mission
               </h3>
-              <p className="mt-3 text-navy-700/80 leading-relaxed">
+              <p className="mt-3 text-[15px] text-navy-700/80 leading-relaxed">
                 To deliver construction solutions built on trust, quality workmanship
                 and timely completion — turning client dreams into built reality.
               </p>
             </div>
-            <div className="border border-stone-200 bg-white p-7">
-              <h3 className="font-display text-2xl text-navy-900 font-semibold">
+            <div className="border border-stone-200 bg-white p-6 sm:p-7 rounded-[14px] sm:rounded-none">
+              <h3 className="font-display text-[1.5rem] sm:text-2xl text-navy-900 font-semibold">
                 Vision
               </h3>
-              <p className="mt-3 text-navy-700/80 leading-relaxed">
+              <p className="mt-3 text-[15px] text-navy-700/80 leading-relaxed">
                 To be recognized in Pune for reliable, quality-focused construction
                 that creates lasting futures for homeowners and project partners.
               </p>

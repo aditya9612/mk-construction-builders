@@ -4,15 +4,15 @@ import { company } from '../data/company'
 
 export default function PageHero({ eyebrow, title, subtitle, crumbs = [] }) {
   return (
-    <section className="relative bg-navy-950 text-stone-50 pt-28 sm:pt-32 md:pt-40 pb-14 sm:pb-16 md:pb-20">
+    <section className="relative bg-navy-950 text-stone-50 pt-[6.5rem] sm:pt-32 md:pt-40 pb-14 sm:pb-16 md:pb-20">
       <div className="absolute inset-0 overflow-hidden">
         <img
           src={company.images.about}
           alt=""
-          className="h-full w-full object-cover opacity-30"
+          className="h-full w-full object-cover opacity-30 object-center"
           aria-hidden
         />
-        <div className="absolute inset-0 bg-[linear-gradient(100deg,rgba(5,10,16,0.96)_0%,rgba(5,10,16,0.82)_55%,rgba(5,10,16,0.7)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,10,16,0.92)_0%,rgba(5,10,16,0.88)_100%)] md:bg-[linear-gradient(100deg,rgba(5,10,16,0.96)_0%,rgba(5,10,16,0.82)_55%,rgba(5,10,16,0.7)_100%)]" />
         <div className="absolute inset-0 grain" />
       </div>
 
@@ -24,14 +24,14 @@ export default function PageHero({ eyebrow, title, subtitle, crumbs = [] }) {
       <div className="relative container-arch min-w-0">
         {crumbs.length > 0 && (
           <nav className="mb-5 sm:mb-6 text-[11px] uppercase tracking-[0.18em] text-stone-400 flex flex-wrap gap-2 break-words">
-            <Link to="/" className="hover:text-gold-400 transition-colors">
+            <Link to="/" className="hover:text-gold-400 transition-colors min-h-11 inline-flex items-center">
               Home
             </Link>
             {crumbs.map((c) => (
-              <span key={c.label} className="flex gap-2 min-w-0">
+              <span key={c.label} className="flex gap-2 min-w-0 items-center">
                 <span className="text-stone-600 shrink-0">/</span>
                 {c.to ? (
-                  <Link to={c.to} className="hover:text-gold-400 transition-colors break-words">
+                  <Link to={c.to} className="hover:text-gold-400 transition-colors break-words min-h-11 inline-flex items-center">
                     {c.label}
                   </Link>
                 ) : (
@@ -47,7 +47,7 @@ export default function PageHero({ eyebrow, title, subtitle, crumbs = [] }) {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-[11px] uppercase tracking-[0.28em] text-gold-400 mb-4"
+            className="text-[11px] uppercase tracking-[0.18em] sm:tracking-[0.28em] text-gold-400 mb-3 sm:mb-4"
           >
             {eyebrow}
           </motion.p>
@@ -57,7 +57,7 @@ export default function PageHero({ eyebrow, title, subtitle, crumbs = [] }) {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-          className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.75rem] font-semibold max-w-4xl text-balance leading-tight break-words"
+          className="font-display text-[clamp(2rem,8vw,3.75rem)] sm:text-4xl md:text-5xl lg:text-[3.75rem] font-semibold max-w-4xl text-balance leading-[1.1] break-words"
         >
           {title}
         </motion.h1>

@@ -72,10 +72,10 @@ export default function QuoteForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white border border-stone-200 p-6 md:p-8 space-y-4"
+      className="bg-white border border-stone-200 p-5 sm:p-6 md:p-8 space-y-4 rounded-[14px] sm:rounded-none"
       noValidate
     >
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input label="Full Name *" value={form.fullName} onChange={(v) => update('fullName', v)} />
         <Input label="Mobile Number *" value={form.mobile} onChange={(v) => update('mobile', v)} type="tel" />
         <Input label="Email" value={form.email} onChange={(v) => update('email', v)} type="email" />
@@ -87,19 +87,19 @@ export default function QuoteForm() {
         <Input label="Budget Range" value={form.budgetRange} onChange={(v) => update('budgetRange', v)} />
       </div>
       <label className="block">
-        <span className="text-xs uppercase tracking-wider text-navy-700/60">Message</span>
+        <span className="text-[11px] uppercase tracking-[0.16em] text-navy-700/60">Message</span>
         <textarea
           rows={5}
           value={form.message}
           onChange={(e) => update('message', e.target.value)}
-          className="mt-2 w-full border border-stone-200 bg-stone-50 px-3 py-3 focus:outline-none focus:border-gold-500"
+          className="form-textarea"
         />
       </label>
       {error && <p className="text-sm text-red-700">{error}</p>}
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full sm:w-auto btn-primary disabled:opacity-60"
+        className="w-full sm:w-auto btn-primary min-h-[50px] disabled:opacity-60"
       >
         {status === 'loading' ? 'Submitting…' : 'Submit Quote Request'}
       </button>
@@ -109,13 +109,13 @@ export default function QuoteForm() {
 
 function Input({ label, value, onChange, type = 'text' }) {
   return (
-    <label className="block">
-      <span className="text-xs uppercase tracking-wider text-navy-700/60">{label}</span>
+    <label className="block min-w-0">
+      <span className="text-[11px] uppercase tracking-[0.16em] text-navy-700/60">{label}</span>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-2 w-full border border-stone-200 bg-stone-50 px-3 py-3 focus:outline-none focus:border-gold-500"
+        className="form-control"
       />
     </label>
   )

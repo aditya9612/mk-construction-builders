@@ -36,7 +36,6 @@ export default function ContactForm() {
         ...form,
         id: crypto.randomUUID(),
         createdAt: new Date().toISOString(),
-        // Ready for FastAPI: POST /api/enquiries
       }
       existing.push(entry)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(existing))
@@ -65,15 +64,15 @@ export default function ContactForm() {
 
   if (status === 'success') {
     return (
-      <div className="border border-gold-500/40 bg-stone-50 p-8 text-center">
+      <div className="border border-gold-500/40 bg-stone-50 p-6 sm:p-8 text-center rounded-[14px] sm:rounded-none">
         <h3 className="font-display text-2xl text-navy-900">Thank you</h3>
-        <p className="mt-3 text-navy-700/80 leading-relaxed">
+        <p className="mt-3 text-navy-700/80 leading-relaxed text-[15px]">
           Thank you for contacting {company.name}. Our team will get back to you.
         </p>
         <button
           type="button"
           onClick={() => setStatus('idle')}
-          className="mt-6 text-sm text-gold-600 hover:text-gold-500"
+          className="mt-6 min-h-11 text-sm text-gold-600 hover:text-gold-500"
         >
           Send another enquiry
         </button>
@@ -83,7 +82,7 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Field label="Name *" value={form.name} onChange={(v) => update('name', v)} required />
         <Field
           label="Mobile *"
@@ -115,42 +114,44 @@ export default function ContactForm() {
         />
       </div>
       <label className="block">
-        <span className="text-xs uppercase tracking-wider text-navy-700/60">
+        <span className="text-[11px] uppercase tracking-[0.16em] text-navy-700/60">
           Message
         </span>
         <textarea
           rows={4}
           value={form.message}
-          onChange={(e) => update('message', e.target.value)}
-          className="mt-2 w-full border border-stone-200 bg-stone-50 px-3.5 py-3.5 text-[14px] focus:outline-none focus:border-gold-500 transition"
+          onChange={(e) => setForm((prev) => ({ ...prev, message: e.target.value }))}
+          className="form-textarea"
         />
       </label>
 
       {error && <p className="text-sm text-red-700">{error}</p>}
 
-      <div className="flex flex-col sm:flex-row gap-3 pt-2">
+      <div className="flex flex-col gap-3 pt-2">
         <button
           type="submit"
           disabled={status === 'loading'}
-          className="btn-dark disabled:opacity-60"
+          className="btn-dark w-full min-h-[50px] disabled:opacity-60"
         >
           {status === 'loading' ? 'Submitting…' : 'Submit Enquiry'}
         </button>
-        <button
-          type="button"
-          onClick={handleWhatsApp}
-          className="inline-flex items-center justify-center gap-2 border border-stone-200 px-6 py-3.5 text-[12px] uppercase tracking-[0.12em] hover:border-gold-500 hover:text-gold-600 transition"
-        >
-          <MessageCircle className="h-4 w-4" />
-          WhatsApp
-        </button>
-        <a
-          href={`tel:${company.phone}`}
-          className="inline-flex items-center justify-center gap-2 border border-stone-200 px-6 py-3.5 text-[12px] uppercase tracking-[0.12em] hover:border-gold-500 hover:text-gold-600 transition"
-        >
-          <Phone className="h-4 w-4" />
-          Call Now
-        </a>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button
+            type="button"
+            onClick={handleWhatsApp}
+            className="inline-flex items-center justify-center gap-2 border border-stone-200 min-h-[50px] px-6 py-3.5 text-[12px] uppercase tracking-[0.12em] hover:border-gold-500 hover:text-gold-600 transition"
+          >
+            <MessageCircle className="h-4 w-4" />
+            WhatsApp
+          </button>
+          <a
+            href={`tel:${company.phone}`}
+            className="inline-flex items-center justify-center gap-2 border border-stone-200 min-h-[50px] px-6 py-3.5 text-[12px] uppercase tracking-[0.12em] hover:border-gold-500 hover:text-gold-600 transition"
+          >
+            <Phone className="h-4 w-4" />
+            Call Now
+          </a>
+        </div>
       </div>
     </form>
   )
@@ -158,8 +159,8 @@ export default function ContactForm() {
 
 function Field({ label, value, onChange, type = 'text', required }) {
   return (
-    <label className="block">
-      <span className="text-xs uppercase tracking-wider text-navy-700/60">
+    <label className="block min-w-0">
+      <span className="text-[11px] uppercase tracking-[0.16em] text-navy-700/60">
         {label}
       </span>
       <input
@@ -167,7 +168,7 @@ function Field({ label, value, onChange, type = 'text', required }) {
         required={required}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-2 w-full border border-stone-200 bg-stone-50 px-3.5 py-3.5 text-[14px] focus:outline-none focus:border-gold-500 transition"
+        className="form-control"
       />
     </label>
   )

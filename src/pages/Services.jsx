@@ -17,7 +17,7 @@ export default function Services() {
             Service details are configurable via{' '}
             <code className="text-xs bg-stone-100 px-1.5 py-0.5">src/data/services.js</code>.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-5">
             {services.map((service, index) => (
               <div key={service.id} className="min-w-0">
                 <ServiceCard service={service} index={index} />

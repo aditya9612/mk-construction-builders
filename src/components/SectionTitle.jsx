@@ -27,7 +27,7 @@ export default function SectionTitle({
       {eyebrow && (
         <span
           className={cn(
-            'text-[11px] tracking-[0.28em] uppercase mb-4',
+            'text-[11px] tracking-[0.18em] sm:tracking-[0.28em] uppercase mb-3 sm:mb-4',
             light ? 'text-gold-400' : 'text-gold-600',
           )}
         >
@@ -36,7 +36,7 @@ export default function SectionTitle({
       )}
       <h2
         className={cn(
-          'font-display text-[1.85rem] sm:text-4xl md:text-[2.75rem] lg:text-[3.15rem] font-semibold leading-tight text-balance break-words max-w-full',
+          'section-title-heading font-display text-[clamp(2rem,8vw,3.15rem)] sm:text-4xl md:text-[2.75rem] lg:text-[3.15rem] font-semibold leading-tight text-balance break-words max-w-full',
           light ? 'text-stone-50' : 'text-navy-900',
         )}
       >

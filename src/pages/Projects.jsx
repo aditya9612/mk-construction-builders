@@ -29,7 +29,7 @@ export default function Projects() {
               No projects match this filter yet.
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-5">
               <AnimatePresence mode="popLayout">
                 {list.map((project, index) => (
                   <div key={project.id} className="min-w-0">

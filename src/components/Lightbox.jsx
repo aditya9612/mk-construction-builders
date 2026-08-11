@@ -24,7 +24,7 @@ export default function Lightbox({ items, index, onClose, onPrev, onNext }) {
     <AnimatePresence>
       {item && (
         <motion.div
-          className="fixed inset-0 z-[60] bg-navy-950/95 flex items-center justify-center p-4"
+          className="fixed inset-0 z-[10050] bg-navy-950/95 flex items-center justify-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

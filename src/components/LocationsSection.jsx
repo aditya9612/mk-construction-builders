@@ -35,12 +35,12 @@ export default function LocationsSection() {
           ))}
         </div>
 
-        <div className="mt-14 border border-stone-200 bg-white p-8 md:p-10 text-center">
-          <p className="font-display text-2xl md:text-3xl text-navy-900">
+        <div className="mt-12 md:mt-14 border border-stone-200 bg-white p-6 sm:p-8 md:p-10 text-center rounded-[14px] sm:rounded-none">
+          <p className="font-display text-[clamp(1.35rem,5vw,1.875rem)] md:text-3xl text-navy-900 leading-snug">
             {mapsPlaceholder.label}
           </p>
-          <p className="mt-2 text-[14px] text-navy-700/65">{mapsPlaceholder.note}</p>
-          <div className="mt-7 aspect-[21/9] bg-stone-100 border border-stone-200/80 flex items-center justify-center text-navy-700/45 text-[13px] tracking-wide">
+          <p className="mt-2 text-[14px] text-navy-700/65 leading-relaxed">{mapsPlaceholder.note}</p>
+          <div className="mt-7 aspect-[16/10] sm:aspect-[21/9] bg-stone-100 border border-stone-200/80 flex items-center justify-center text-navy-700/45 text-[12px] sm:text-[13px] tracking-wide px-4 text-balance">
             Google Maps placeholder — embed URL can be added later
           </div>
         </div>

@@ -13,7 +13,7 @@ export default function Packages() {
       />
       <section className="section-pad">
         <div className="container-arch">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 min-[768px]:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-8">
             {packages.map((pkg, index) => (
               <div key={pkg.id} className="min-w-0">
                 <PackageCard pkg={pkg} index={index} />

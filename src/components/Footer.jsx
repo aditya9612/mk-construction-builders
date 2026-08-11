@@ -56,7 +56,7 @@ export default function Footer() {
         aria-hidden
         className="pointer-events-none absolute inset-0 overflow-hidden"
       >
-        <span className="absolute top-0 right-4 font-display text-[7rem] sm:text-[8rem] md:text-[12rem] leading-none text-white/[0.03] select-none">
+        <span className="absolute top-0 right-4 font-display text-[5.5rem] sm:text-[8rem] md:text-[12rem] leading-none text-white/[0.03] select-none pointer-events-none">
           MK
         </span>
       </div>
@@ -193,11 +193,14 @@ export default function Footer() {
             <p className="mt-3 text-sm text-stone-400">Call Us</p>
             <a
               href={`tel:${company.phone}`}
-              className="text-sm text-stone-200 hover:text-gold-400 transition"
+              className="text-sm text-stone-200 hover:text-gold-400 transition max-sm:block"
             >
               {company.displayPhone}
             </a>
-            <Link to="/request-quote" className="mt-6 btn-primary !px-5 !py-2.5 !text-[11px]">
+            <Link
+              to="/request-quote"
+              className="mt-6 btn-primary !px-5 !py-2.5 !text-[11px] max-sm:mt-4 max-sm:flex max-sm:mx-auto max-sm:w-[88%] max-sm:max-w-[90%]"
+            >
               Get Free Quote
             </Link>
           </div>
