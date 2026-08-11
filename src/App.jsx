@@ -1,10 +1,11 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
 import MobileActionBar from './components/MobileActionBar'
 import ScrollToTop from './components/ScrollToTop'
+import Seo from './components/Seo'
 import Home from './pages/Home'
 import About from './pages/About'
 import Services from './pages/Services'
@@ -20,6 +21,7 @@ import Quality from './pages/Quality'
 import Testimonials from './pages/Testimonials'
 import Contact from './pages/Contact'
 import RequestQuote from './pages/RequestQuote'
+import { pageSeo } from './data/seo'
 
 function PageTransition({ children }) {
   return (
@@ -31,6 +33,29 @@ function PageTransition({ children }) {
     >
       {children}
     </motion.div>
+  )
+}
+
+function NotFound() {
+  const seo = pageSeo.notFound
+  return (
+    <>
+      <Seo
+        title={seo.title}
+        description={seo.description}
+        path={seo.path}
+        noindex
+      />
+      <div className="pt-32 pb-20 text-center px-4">
+        <h1 className="font-display text-4xl text-navy-900">Page not found</h1>
+        <p className="mt-3 text-navy-700/70">
+          The page you are looking for does not exist.
+        </p>
+        <Link to="/" className="mt-6 inline-block text-gold-600">
+          Go home
+        </Link>
+      </div>
+    </>
   )
 }
 
@@ -60,22 +85,7 @@ export default function App() {
               <Route path="/testimonials" element={<Testimonials />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/request-quote" element={<RequestQuote />} />
-              <Route
-                path="*"
-                element={
-                  <div className="pt-32 pb-20 text-center px-4">
-                    <h1 className="font-display text-4xl text-navy-900">
-                      Page not found
-                    </h1>
-                    <p className="mt-3 text-navy-700/70">
-                      The page you are looking for does not exist.
-                    </p>
-                    <a href="/" className="mt-6 inline-block text-gold-600">
-                      Go home
-                    </a>
-                  </div>
-                }
-              />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </PageTransition>
         </AnimatePresence>

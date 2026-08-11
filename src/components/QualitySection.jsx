@@ -31,22 +31,27 @@ const pillars = [
   },
 ]
 
-export default function QualitySection({ compact = false }) {
+export default function QualitySection({
+  compact = false,
+  eyebrow = 'Quality',
+  title = 'Quality Is Our Foundation',
+  subtitle = `${company.marathiTaglineEnglish} With ${company.qualityChecks} quality checks as a verified benchmark of our focus.`,
+}) {
   return (
     <section className={compact ? 'section-pad' : 'section-pad bg-stone-100'}>
       <div className="container-arch">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-start">
           <div className="min-w-0 w-full">
             <SectionTitle
-              eyebrow="Quality"
-              title="Quality Is Our Foundation"
-              subtitle={`${company.marathiTaglineEnglish} With ${company.qualityChecks} quality checks as a verified benchmark of our focus.`}
+              eyebrow={eyebrow}
+              title={title}
+              subtitle={subtitle}
             />
             <div className="arch-frame w-full">
               <div className="image-reveal aspect-[4/3] w-full">
                 <img
                   src={company.images.quality}
-                  alt="Quality construction practices at MK Construction & Builders"
+                  alt="Quality-focused construction workmanship by MK Construction & Builders"
                   className="h-full w-full object-cover"
                   loading="lazy"
                 />

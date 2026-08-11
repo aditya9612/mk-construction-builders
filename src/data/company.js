@@ -35,10 +35,14 @@ export const company = {
     founder: '/images/founder.jpg',
     quality: '/images/quality.jpg',
   },
+  website: 'https://mkconstruction.site',
+  state: 'Maharashtra',
+  country: 'India',
+  logo: '/images/logo/mk-construction-logo.png',
   seo: {
-    title: 'MK Construction & Builders | Building Dreams, Creating Futures',
+    title: 'MK Construction & Builders | Construction Company in Pune',
     description:
-      'MK Construction & Builders – construction and building solutions focused on trust, quality and timely completion in Pune.',
+      'MK Construction & Builders is a Pune-based construction company offering residential construction, building, renovation and construction solutions with a focus on quality, trust and on-time completion.',
   },
 }
 

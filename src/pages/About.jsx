@@ -1,16 +1,22 @@
+import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import FounderSection from '../components/FounderSection'
 import SectionTitle from '../components/SectionTitle'
 import StatCard from '../components/StatCard'
+import { Link } from 'react-router-dom'
 import { company } from '../data/company'
+import { pageSeo } from '../data/seo'
 
 export default function About() {
+  const seo = pageSeo.about
+
   return (
     <>
+      <Seo title={seo.title} description={seo.description} path={seo.path} />
       <PageHero
         eyebrow="About"
         title={`About ${company.name}`}
-        subtitle={company.marathiTagline}
+        subtitle={`${company.marathiTagline} — construction and builders based in Pune, Maharashtra.`}
         crumbs={[{ label: 'About' }]}
       />
 
@@ -35,8 +41,17 @@ export default function About() {
                 <p>
                   Our verified focus includes {company.projects} projects and{' '}
                   {company.qualityChecks} quality checks — markers of a quality-first
-                  construction practice.
+                  construction practice for homeowners and project partners in
+                  Maharashtra.
                 </p>
+              </div>
+              <div className="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
+                <Link to="/services" className="btn-dark w-full sm:w-auto min-h-[50px]">
+                  View our construction services
+                </Link>
+                <Link to="/projects" className="btn-ghost w-full sm:w-auto min-h-[50px]">
+                  Explore our projects
+                </Link>
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 min-w-0">

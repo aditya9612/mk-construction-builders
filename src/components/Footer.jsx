@@ -86,11 +86,13 @@ export default function Footer() {
             <p className="mt-6 flex items-start gap-2.5 text-sm text-stone-400">
               <MapPin className="h-4 w-4 mt-0.5 text-gold-500 shrink-0" />
               <span>
-                Projects across {company.city}
-                <br />
-                <span className={isPlaceholder(company.address) ? 'text-stone-500' : ''}>
-                  {company.address}
-                </span>
+                Projects across {company.city}, Maharashtra, India
+                {!isPlaceholder(company.address) && (
+                  <>
+                    <br />
+                    {company.address}
+                  </>
+                )}
               </span>
             </p>
           </div>

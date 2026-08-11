@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
+import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import { testimonials } from '../data/testimonials'
+import { pageSeo } from '../data/seo'
 
 function TestimonialCarousel({ items }) {
   const [index, setIndex] = useState(0)
@@ -93,12 +96,15 @@ function TestimonialCarousel({ items }) {
 }
 
 export default function Testimonials() {
+  const seo = pageSeo.testimonials
+
   return (
     <>
+      <Seo title={seo.title} description={seo.description} path={seo.path} />
       <PageHero
         eyebrow="Voice of Clients"
         title="Testimonials"
-        subtitle="Client feedback will appear here once provided."
+        subtitle="Client feedback for MK Construction & Builders will appear here once provided."
         crumbs={[{ label: 'Testimonials' }]}
       />
       <section className="section-pad">
@@ -108,12 +114,16 @@ export default function Testimonials() {
               <p className="font-display text-[clamp(1.5rem,6vw,2.5rem)] text-navy-900 leading-snug">
                 Client testimonials will be added here.
               </p>
-              <p className="mt-4 text-sm text-navy-700/70 leading-relaxed">
-                Add entries to{' '}
-                <code className="bg-stone-100 px-1.5 py-0.5 text-xs break-all">
-                  src/data/testimonials.js
-                </code>{' '}
-                when available.
+              <p className="mt-4 text-sm text-navy-700/70 leading-relaxed max-w-lg mx-auto">
+                Meanwhile, you can{' '}
+                <Link to="/projects" className="text-gold-600 hover:text-gold-500 transition">
+                  explore our projects
+                </Link>{' '}
+                or{' '}
+                <Link to="/contact" className="text-gold-600 hover:text-gold-500 transition">
+                  contact MK Construction &amp; Builders
+                </Link>{' '}
+                about your Pune construction requirement.
               </p>
             </div>
           ) : (

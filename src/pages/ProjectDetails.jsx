@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { MapPin } from 'lucide-react'
+import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import Lightbox from '../components/Lightbox'
 import { getProjectById } from '../data/projects'
+import { pageSeo, projectSeo } from '../data/seo'
 
 export default function ProjectDetails() {
   const { id } = useParams()
@@ -13,6 +15,12 @@ export default function ProjectDetails() {
   if (!project) {
     return (
       <>
+        <Seo
+          title={pageSeo.notFound.title}
+          description={pageSeo.notFound.description}
+          path="/projects"
+          noindex
+        />
         <PageHero
           title="Project not found"
           crumbs={[
@@ -23,22 +31,24 @@ export default function ProjectDetails() {
         <div className="container-arch py-16 text-center">
           <p>This project does not exist.</p>
           <Link to="/projects" className="mt-4 inline-block text-gold-600">
-            Back to projects
+            Explore our projects
           </Link>
         </div>
       </>
     )
   }
 
+  const seo = projectSeo(project)
   const galleryItems = (project.gallery || []).map((src, i) => ({
     id: `${project.id}-${i}`,
     src,
-    caption: `${project.name} — image ${i + 1}`,
+    caption: `MK Construction ${project.type.toLowerCase()} project in ${project.location}, Pune`,
     category: project.type,
   }))
 
   return (
     <>
+      <Seo title={seo.title} description={seo.description} path={seo.path} />
       <PageHero
         eyebrow={project.status}
         title={project.name}
@@ -54,7 +64,7 @@ export default function ProjectDetails() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-w-0">
             <img
               src={project.mainImage}
-              alt={project.name}
+              alt={`MK Construction ${project.type.toLowerCase()} project in ${project.location}, Pune`}
               className="w-full max-w-full aspect-[4/3] object-cover border border-stone-200"
             />
             <div className="min-w-0">
@@ -140,13 +150,21 @@ export default function ProjectDetails() {
           )}
 
           <div className="border border-stone-200 bg-stone-50 p-6 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
-            <p className="text-navy-800">Interested in a similar project?</p>
-            <Link
-              to="/request-quote"
-              className="inline-flex justify-center bg-navy-900 text-stone-50 px-5 py-3 text-sm hover:bg-navy-800 transition"
-            >
-              Request a Quote
-            </Link>
+            <p className="text-navy-800">Interested in a similar project in Pune?</p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link
+                to="/request-quote"
+                className="inline-flex justify-center bg-navy-900 text-stone-50 px-5 py-3 text-sm hover:bg-navy-800 transition min-h-11 items-center"
+              >
+                Request a Quote
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex justify-center border border-stone-300 px-5 py-3 text-sm hover:border-gold-500 transition min-h-11 items-center"
+              >
+                Contact MK Construction &amp; Builders
+              </Link>
+            </div>
           </div>
         </div>
       </section>

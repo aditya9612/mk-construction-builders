@@ -14,7 +14,7 @@ export default function ServiceCard({ service, index = 0 }) {
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
           src={service.image}
-          alt={service.title}
+          alt={`${service.title} — MK Construction & Builders Pune`}
           loading="lazy"
           className="h-full w-full object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
         />

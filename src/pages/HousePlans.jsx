@@ -1,14 +1,19 @@
+import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import HousePlanCard from '../components/HousePlanCard'
 import { housePlans } from '../data/housePlans'
+import { pageSeo } from '../data/seo'
 
 export default function HousePlans() {
+  const seo = pageSeo.housePlans
+
   return (
     <>
+      <Seo title={seo.title} description={seo.description} path={seo.path} />
       <PageHero
         eyebrow="Plans"
         title="House Plans"
-        subtitle="Plan categories for discussion. Area, layouts and pricing details available on request."
+        subtitle="Plan categories for residential discussion in Pune. Area, layouts and pricing details available on request."
         crumbs={[{ label: 'House Plans' }]}
       />
       <section className="section-pad">

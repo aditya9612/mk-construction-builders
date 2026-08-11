@@ -16,7 +16,7 @@ export default function ProjectCard({ project, index = 0 }) {
         <div className="relative aspect-[4/3] overflow-hidden">
           <img
             src={project.mainImage}
-            alt={`${project.name} in ${project.location}`}
+            alt={`${project.name} — ${project.type.toLowerCase()} construction by MK Construction in ${project.location}, Pune`}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-[1.15s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
           />

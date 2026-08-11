@@ -27,7 +27,7 @@ export default function Hero() {
       <div className="absolute inset-0 overflow-hidden">
         <motion.img
           src={company.images.hero}
-          alt="Modern residential construction by MK Construction & Builders"
+          alt="Modern residential construction project by MK Construction & Builders in Pune"
           className="h-full w-full object-cover object-center max-md:object-[center_30%]"
           initial={{ scale: 1.08 }}
           animate={{ scale: 1 }}
@@ -45,38 +45,16 @@ export default function Hero() {
 
       <div className="hero-content relative z-10 container-arch w-full min-w-0">
         <div className="max-w-4xl min-w-0 w-full">
-          {/* Mobile: compact eyebrow brand */}
-          <motion.p
-            custom={0.05}
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            className="md:hidden text-[11px] sm:text-[12px] uppercase tracking-[0.18em] text-gold-400 mb-3"
-          >
-            {company.name}
-          </motion.p>
-
-          {/* Desktop: large brand mark */}
-          <motion.p
-            custom={0.05}
-            variants={fadeUp}
-            initial="hidden"
-            animate="show"
-            className="hidden md:block font-display text-3xl lg:text-4xl text-stone-50/95 font-medium tracking-[0.01em] break-words max-w-full"
-          >
-            {company.name}
-          </motion.p>
-
           <motion.div
             custom={0.15}
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="mb-4 sm:mb-5 flex items-center gap-3 sm:gap-4 min-w-0 md:mt-3"
+            className="mb-4 sm:mb-5 flex items-center gap-3 sm:gap-4 min-w-0"
           >
             <span className="arch-rule" />
             <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-gold-400/90 break-words">
-              Pune · Trust · Quality · On-Time
+              Pune · Maharashtra · Trust · Quality · On-Time
             </span>
           </motion.div>
 
@@ -85,11 +63,16 @@ export default function Hero() {
             variants={fadeUp}
             initial="hidden"
             animate="show"
-            className="hero-heading font-display text-stone-50 font-semibold max-w-full break-words text-balance"
+            className="max-w-full break-words text-balance"
           >
-            Building Dreams,
-            <br />
-            <span className="text-gold-400 italic font-medium">Creating Futures.</span>
+            <span className="block font-display text-[1.15rem] sm:text-xl md:text-3xl lg:text-4xl text-stone-50/95 font-medium tracking-[0.01em] mb-3 sm:mb-4 md:mb-3">
+              {company.name}
+            </span>
+            <span className="hero-heading font-display text-stone-50 font-semibold block">
+              Building Dreams,
+              <br />
+              <span className="text-gold-400 italic font-medium">Creating Futures.</span>
+            </span>
           </motion.h1>
 
           <motion.p
@@ -110,7 +93,7 @@ export default function Hero() {
             className="mt-6 sm:mt-7 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 w-full"
           >
             <Link to="/projects" className="btn-primary w-full sm:w-auto min-h-[50px]">
-              Explore Our Projects
+              Explore our projects
               <ArrowRight className="h-4 w-4 shrink-0" />
             </Link>
             <Link to="/request-quote" className="btn-secondary w-full sm:w-auto min-h-[50px]">

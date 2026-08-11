@@ -1,14 +1,20 @@
+import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import PackageCard from '../components/PackageCard'
 import { packages } from '../data/pricing'
+import { pageSeo } from '../data/seo'
 
 export default function Packages() {
+  const seo = pageSeo.packages
+
   return (
     <>
+      <Seo title={seo.title} description={seo.description} path={seo.path} />
       <PageHero
         eyebrow="Packages"
         title="Construction Packages"
-        subtitle="Editable package cards. Prices remain available on request until official rates are provided."
+        subtitle="Construction package options for residential and building projects in Pune. Final pricing is shared after project discussion."
         crumbs={[{ label: 'Packages' }]}
       />
       <section className="section-pad">
@@ -19,6 +25,14 @@ export default function Packages() {
                 <PackageCard pkg={pkg} index={index} />
               </div>
             ))}
+          </div>
+          <div className="mt-12 flex flex-col sm:flex-row gap-3">
+            <Link to="/request-quote" className="btn-dark w-full sm:w-auto min-h-[50px]">
+              Request a free quote
+            </Link>
+            <Link to="/services" className="btn-ghost w-full sm:w-auto min-h-[50px]">
+              View our construction services
+            </Link>
           </div>
         </div>
       </section>

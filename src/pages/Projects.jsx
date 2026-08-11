@@ -1,20 +1,25 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
+import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import ProjectCard from '../components/ProjectCard'
 import ProjectFilter from '../components/ProjectFilter'
 import { filterProjects, projectFilters } from '../data/projects'
+import { pageSeo } from '../data/seo'
 
 export default function Projects() {
   const [active, setActive] = useState('All')
   const list = useMemo(() => filterProjects(active), [active])
+  const seo = pageSeo.projects
 
   return (
     <>
+      <Seo title={seo.title} description={seo.description} path={seo.path} />
       <PageHero
         eyebrow="Portfolio"
         title="Our Projects"
-        subtitle="Project locations represented from company references across Pune. Exact project names and statistics will be updated when confirmed."
+        subtitle="Construction projects represented across Pune — residential, house, bungalow and commercial work."
         crumbs={[{ label: 'Projects' }]}
       />
       <section className="section-pad">
@@ -39,6 +44,14 @@ export default function Projects() {
               </AnimatePresence>
             </div>
           )}
+          <div className="mt-12 flex flex-col sm:flex-row gap-3">
+            <Link to="/gallery" className="btn-dark w-full sm:w-auto min-h-[50px]">
+              Browse project gallery
+            </Link>
+            <Link to="/services" className="btn-ghost w-full sm:w-auto min-h-[50px]">
+              View our construction services
+            </Link>
+          </div>
         </div>
       </section>
     </>

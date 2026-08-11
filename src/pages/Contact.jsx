@@ -1,14 +1,26 @@
+import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import ContactForm from '../components/ContactForm'
 import { company } from '../data/company'
+import { pageSeo } from '../data/seo'
+import { isPlaceholder } from '../utils/formatters'
 
 export default function Contact() {
+  const seo = pageSeo.contact
+
   return (
     <>
+      <Seo
+        title={seo.title}
+        description={seo.description}
+        path={seo.path}
+        includeBusinessSchema
+      />
       <PageHero
         eyebrow="Contact"
-        title="Get in Touch"
-        subtitle="Share your project details and we will respond with next steps."
+        title="Contact MK Construction & Builders"
+        subtitle="Share your project details and our Pune team will respond with next steps."
         crumbs={[{ label: 'Contact' }]}
       />
       <section className="section-pad">
@@ -19,6 +31,10 @@ export default function Contact() {
             </h2>
             <p className="mt-3 text-gold-400 italic font-display text-lg break-words">
               {company.tagline}
+            </p>
+            <p className="mt-4 text-sm text-stone-300/90 leading-relaxed">
+              Construction company serving homeowners and project partners across
+              Pune, Maharashtra.
             </p>
             <dl className="mt-8 space-y-6 text-sm">
               <div>
@@ -67,9 +83,13 @@ export default function Contact() {
                   Location
                 </dt>
                 <dd className="mt-2 text-stone-200 break-words text-[15px] leading-relaxed">
-                  Projects across {company.city}
-                  <br />
-                  {company.address}
+                  Projects across {company.city}, Maharashtra, India
+                  {!isPlaceholder(company.address) && (
+                    <>
+                      <br />
+                      {company.address}
+                    </>
+                  )}
                 </dd>
               </div>
               <div>
@@ -88,10 +108,14 @@ export default function Contact() {
                 </dd>
               </div>
             </dl>
-            <p className="mt-8 text-xs text-stone-500 leading-relaxed">
-              Contact fields marked with brackets are placeholders until official
-              details are provided.
-            </p>
+            <div className="mt-8 flex flex-col gap-3">
+              <Link to="/services" className="text-gold-400 hover:text-gold-300 text-[13px] uppercase tracking-[0.14em] min-h-11 inline-flex items-center">
+                View our construction services
+              </Link>
+              <Link to="/projects" className="text-stone-300 hover:text-gold-400 text-[13px] uppercase tracking-[0.14em] min-h-11 inline-flex items-center">
+                Explore our projects
+              </Link>
+            </div>
           </div>
           <div className="min-w-0">
             <h2 className="font-display text-[1.65rem] sm:text-3xl text-navy-900 font-semibold mb-6 break-words">

@@ -1,14 +1,19 @@
+import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import QuoteForm from '../components/QuoteForm'
 import { company } from '../data/company'
+import { pageSeo } from '../data/seo'
 
 export default function RequestQuote() {
+  const seo = pageSeo.requestQuote
+
   return (
     <>
+      <Seo title={seo.title} description={seo.description} path={seo.path} />
       <PageHero
         eyebrow="Enquiry"
         title="Request a Quote"
-        subtitle={`Tell us about your project and the ${company.shortName} team will get back to you.`}
+        subtitle={`Tell us about your Pune construction project and the ${company.shortName} team will get back to you.`}
         crumbs={[{ label: 'Request a Quote' }]}
       />
       <section className="section-pad">
