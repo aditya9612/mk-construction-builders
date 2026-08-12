@@ -1,22 +1,29 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
+import { fadeUp } from '../motion/variants'
+import { EASE, DURATION, STAGGER } from '../motion/tokens'
 
 export default function ServiceCard({ service, index = 0 }) {
+  const reduceMotion = useReducedMotion()
+
   return (
     <motion.article
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      custom={index * STAGGER.normal}
+      initial={reduceMotion ? false : 'hidden'}
+      whileInView="visible"
       viewport={{ once: true, margin: '-40px' }}
-      transition={{ delay: index * 0.06, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative flex flex-col min-w-0 w-full overflow-hidden bg-stone-50 border border-stone-200/80 rounded-[14px] sm:rounded-none transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]"
+      whileHover={reduceMotion ? undefined : { y: -4 }}
+      transition={{ duration: DURATION.reveal, ease: EASE }}
+      className="group relative flex flex-col min-w-0 w-full overflow-hidden bg-stone-50 border border-stone-200/80 rounded-[14px] sm:rounded-none hover-lift transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
           src={service.image}
           alt={`${service.title} — MK Construction & Builders Pune`}
           loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+          className="h-full w-full object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950/55 via-transparent to-transparent" />
         <span className="absolute bottom-4 left-4 text-[10px] uppercase tracking-[0.22em] text-gold-300">

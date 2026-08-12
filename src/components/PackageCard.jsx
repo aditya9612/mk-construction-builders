@@ -1,17 +1,24 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { cn } from '../utils/formatters'
+import { fadeUp } from '../motion/variants'
+import { EASE, DURATION, STAGGER } from '../motion/tokens'
 
 export default function PackageCard({ pkg, index = 0 }) {
+  const reduceMotion = useReducedMotion()
+
   return (
     <motion.article
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      custom={index * STAGGER.normal}
+      initial={reduceMotion ? false : 'hidden'}
+      whileInView="visible"
       viewport={{ once: true }}
-      transition={{ delay: index * 0.08, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={reduceMotion ? undefined : { y: -4 }}
+      transition={{ duration: DURATION.reveal, ease: EASE }}
       className={cn(
-        'relative flex flex-col p-6 sm:p-8 md:p-9 h-full min-w-0 w-full transition-shadow duration-500 rounded-[14px] sm:rounded-none',
+        'relative flex flex-col p-6 sm:p-8 md:p-9 h-full min-w-0 w-full hover-lift transition-shadow duration-500 rounded-[14px] sm:rounded-none',
         pkg.highlighted && 'pt-8 sm:pt-9',
         pkg.highlighted
           ? 'bg-navy-900 text-stone-50 shadow-[var(--shadow-lift)] ring-1 ring-gold-500'
@@ -42,7 +49,7 @@ export default function PackageCard({ pkg, index = 0 }) {
           <li key={f} className="flex gap-2.5 text-[14px]">
             <Check
               className={cn(
-                'h-4 w-4 mt-0.5 shrink-0',
+                'h-4 w-4 mt-0.5 shrink-0 transition-transform duration-300 group-hover:scale-110',
                 pkg.highlighted ? 'text-gold-400' : 'text-gold-600',
               )}
             />

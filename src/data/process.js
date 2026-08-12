@@ -5,6 +5,10 @@ export const processSteps = [
     title: 'Requirement Discussion',
     description:
       'Understand project goals, preferences and expectations clearly.',
+    image: '/images/handover/mk-construction-pune-client-project-handover-02.webp',
+    imageAlt:
+      'MK Construction team discussing residential project requirements with clients',
+    objectPosition: 'center 22%',
   },
   {
     id: 2,
@@ -12,6 +16,10 @@ export const processSteps = [
     title: 'Site Visit',
     description:
       'Review site conditions to prepare informed planning and estimation.',
+    image: '/images/site/mk-construction-pune-site-inspection-team.webp',
+    imageAlt:
+      'Construction professionals inspecting a Pune building site during a site visit',
+    objectPosition: 'center 20%',
   },
   {
     id: 3,
@@ -19,6 +27,10 @@ export const processSteps = [
     title: 'Planning & Design',
     description:
       'Shape planning and design direction based on requirements.',
+    image: '/images/site/mk-construction-pune-site-supervision-blueprints.webp',
+    imageAlt:
+      'Architectural planning and structural drawings reviewed on a construction site',
+    objectPosition: 'center 20%',
   },
   {
     id: 4,
@@ -26,6 +38,10 @@ export const processSteps = [
     title: 'Estimation',
     description:
       'Prepare quotation discussions based on scope, materials and site needs.',
+    image: '/images/site/mk-construction-pune-construction-site-supervision.webp',
+    imageAlt:
+      'Construction supervisor reviewing site scope for project estimation',
+    objectPosition: 'center',
   },
   {
     id: 5,
@@ -33,6 +49,10 @@ export const processSteps = [
     title: 'Project Execution',
     description:
       'Execute construction with quality focus and structured handling.',
+    image: '/images/construction/mk-construction-pune-rcc-reinforcement-work.webp',
+    imageAlt:
+      'Active RCC reinforcement and structural construction work on site',
+    objectPosition: 'center',
   },
   {
     id: 6,
@@ -40,6 +60,10 @@ export const processSteps = [
     title: 'Quality Checks',
     description:
       'Apply quality-focused checks throughout the project journey.',
+    image: '/images/site/mk-construction-pune-site-supervision-rebar.webp',
+    imageAlt:
+      'Engineer inspecting reinforcement quality during construction supervision',
+    objectPosition: 'center',
   },
   {
     id: 7,
@@ -47,6 +71,10 @@ export const processSteps = [
     title: 'Final Inspection',
     description:
       'Review finished work before handover for completeness and quality.',
+    image: '/images/projects/mk-construction-pune-completed-residential-building.webp',
+    imageAlt:
+      'Completed modern residential building ready for final inspection',
+    objectPosition: 'center 18%',
   },
   {
     id: 8,
@@ -54,6 +82,10 @@ export const processSteps = [
     title: 'Project Handover',
     description:
       'Complete handover with clear communication and client readiness.',
+    image: '/images/handover/mk-construction-pune-client-project-handover-01.webp',
+    imageAlt:
+      'MK Construction project handover with completed home and happy clients',
+    objectPosition: 'center 20%',
   },
 ]
 

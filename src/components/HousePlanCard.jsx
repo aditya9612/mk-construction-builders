@@ -1,14 +1,21 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
+import { fadeUp } from '../motion/variants'
+import { DURATION, EASE, STAGGER } from '../motion/tokens'
 
 export default function HousePlanCard({ plan, index = 0 }) {
+  const reduceMotion = useReducedMotion()
+
   return (
     <motion.article
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      custom={index * STAGGER.fast}
+      initial={reduceMotion ? false : 'hidden'}
+      whileInView="visible"
       viewport={{ once: true }}
-      transition={{ delay: index * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="bg-stone-50 border border-stone-200/90 overflow-hidden transition-shadow duration-500 hover:shadow-[var(--shadow-soft)]"
+      whileHover={reduceMotion ? undefined : { y: -4 }}
+      transition={{ duration: DURATION.reveal, ease: EASE }}
+      className="bg-stone-50 border border-stone-200/90 overflow-hidden hover-lift transition-shadow duration-500 hover:shadow-[var(--shadow-soft)]"
     >
       <div className="aspect-[4/3] overflow-hidden image-reveal">
         <img
@@ -51,14 +58,14 @@ export default function HousePlanCard({ plan, index = 0 }) {
             onClick={() =>
               window.alert('Plan drawings will be available when provided.')
             }
-            className="flex-1 border border-stone-200 px-3 py-3 text-[11px] uppercase tracking-[0.14em] hover:border-gold-500 transition"
+            className="flex-1 border border-stone-200 px-3 py-3 text-[11px] uppercase tracking-[0.14em] hover:border-gold-500 hover:-translate-y-0.5 transition-all duration-300"
           >
             View Plan
           </button>
           <Link
             to="/request-quote"
             state={{ plan: plan.title }}
-            className="flex-1 bg-navy-900 text-stone-50 text-center px-3 py-3 text-[11px] uppercase tracking-[0.14em] hover:bg-navy-800 transition"
+            className="flex-1 bg-navy-900 text-stone-50 text-center px-3 py-3 text-[11px] uppercase tracking-[0.14em] hover:bg-navy-800 hover:-translate-y-0.5 transition-all duration-300"
           >
             Request Quote
           </Link>

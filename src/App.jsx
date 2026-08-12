@@ -5,6 +5,8 @@ import Footer from './components/Footer'
 import WhatsAppButton from './components/WhatsAppButton'
 import MobileActionBar from './components/MobileActionBar'
 import ScrollToTop from './components/ScrollToTop'
+import ScrollProgress from './components/ScrollProgress'
+import PremiumCursor from './components/PremiumCursor'
 import Seo from './components/Seo'
 import Home from './pages/Home'
 import About from './pages/About'
@@ -22,14 +24,15 @@ import Testimonials from './pages/Testimonials'
 import Contact from './pages/Contact'
 import RequestQuote from './pages/RequestQuote'
 import { pageSeo } from './data/seo'
+import { pageTransition } from './motion/variants'
 
 function PageTransition({ children }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -6 }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      initial={pageTransition.initial}
+      animate={pageTransition.animate}
+      exit={pageTransition.exit}
+      transition={pageTransition.transition}
     >
       {children}
     </motion.div>
@@ -64,6 +67,8 @@ export default function App() {
 
   return (
     <div className="app-shell min-h-screen flex flex-col w-full min-w-0 overflow-x-clip">
+      <ScrollProgress />
+      <PremiumCursor />
       <ScrollToTop />
       <Navbar />
       <main className="flex-1 w-full min-w-0">

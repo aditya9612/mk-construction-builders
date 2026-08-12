@@ -1,7 +1,10 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { ShieldCheck, Clock3, Handshake, ClipboardCheck, MessageSquare } from 'lucide-react'
 import SectionTitle from './SectionTitle'
+import { ImageReveal } from './motion/Reveal'
 import { company } from '../data/company'
+import { fadeUp } from '../motion/variants'
+import { EASE, DURATION, STAGGER } from '../motion/tokens'
 
 const pillars = [
   {
@@ -37,6 +40,8 @@ export default function QualitySection({
   title = 'Quality Is Our Foundation',
   subtitle = `${company.marathiTaglineEnglish} With ${company.qualityChecks} quality checks as a verified benchmark of our focus.`,
 }) {
+  const reduceMotion = useReducedMotion()
+
   return (
     <section className={compact ? 'section-pad' : 'section-pad bg-stone-100'}>
       <div className="container-arch">
@@ -47,8 +52,8 @@ export default function QualitySection({
               title={title}
               subtitle={subtitle}
             />
-            <div className="arch-frame w-full">
-              <div className="image-reveal aspect-[4/3] w-full">
+            <ImageReveal direction="scale" className="arch-frame w-full">
+              <div className="aspect-[4/3] w-full">
                 <img
                   src={company.images.quality}
                   alt="Quality-focused construction workmanship by MK Construction & Builders"
@@ -56,7 +61,7 @@ export default function QualitySection({
                   loading="lazy"
                 />
               </div>
-            </div>
+            </ImageReveal>
           </div>
           <div className="space-y-3 md:pt-4 min-w-0 w-full">
             {pillars.map((item, index) => {
@@ -64,13 +69,16 @@ export default function QualitySection({
               return (
                 <motion.div
                   key={item.title}
-                  initial={{ opacity: 0, x: 18 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  variants={fadeUp}
+                  custom={index * STAGGER.normal}
+                  initial={reduceMotion ? false : 'hidden'}
+                  whileInView="visible"
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.06, duration: 0.45 }}
-                  className="flex gap-3 sm:gap-4 bg-stone-50 border border-stone-200/80 p-4 sm:p-5 md:p-6 transition-shadow duration-300 hover:shadow-[var(--shadow-soft)] min-w-0"
+                  whileHover={reduceMotion ? undefined : { x: 4 }}
+                  transition={{ duration: DURATION.reveal, ease: EASE }}
+                  className="flex gap-3 sm:gap-4 bg-stone-50 border border-stone-200/80 p-4 sm:p-5 md:p-6 hover-lift transition-shadow duration-300 hover:shadow-[var(--shadow-soft)] min-w-0"
                 >
-                  <div className="h-10 w-10 sm:h-11 sm:w-11 shrink-0 flex items-center justify-center bg-navy-900 text-gold-400">
+                  <div className="h-10 w-10 sm:h-11 sm:w-11 shrink-0 flex items-center justify-center bg-navy-900 text-gold-400 transition-transform duration-300 group-hover:scale-105">
                     <Icon className="h-5 w-5" strokeWidth={1.5} />
                   </div>
                   <div className="min-w-0">

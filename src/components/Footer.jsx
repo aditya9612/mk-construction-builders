@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { MapPin } from 'lucide-react'
 import { company } from '../data/company'
 import { isPlaceholder } from '../utils/formatters'
+import { Reveal, StaggerContainer, StaggerItem } from './motion/Reveal'
 
 function InstagramIcon({ className }) {
   return (
@@ -62,8 +63,8 @@ export default function Footer() {
       </div>
 
       <div className="relative container-arch pt-14 sm:pt-16 md:pt-20 pb-10">
-        <div className="grid gap-10 sm:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 min-w-0">
-          <div className="min-w-0 lg:col-span-1">
+        <StaggerContainer className="grid gap-10 sm:gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 min-w-0">
+          <StaggerItem className="min-w-0 lg:col-span-1">
             <div className="flex items-center gap-3.5 mb-6">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center border border-gold-500/70 text-gold-400 font-display text-lg font-semibold">
                 MK
@@ -95,9 +96,9 @@ export default function Footer() {
                 )}
               </span>
             </p>
-          </div>
+          </StaggerItem>
 
-          <div>
+          <StaggerItem>
             <h3 className="text-[11px] uppercase tracking-[0.24em] text-gold-400 mb-5">
               Explore
             </h3>
@@ -106,16 +107,16 @@ export default function Footer() {
                 <li key={l.to}>
                   <Link
                     to={l.to}
-                    className="text-stone-300/90 hover:text-gold-400 transition text-[14px]"
+                    className="link-underline text-stone-300/90 hover:text-gold-400 transition text-[14px]"
                   >
                     {l.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </StaggerItem>
 
-          <div>
+          <StaggerItem>
             <h3 className="text-[11px] uppercase tracking-[0.24em] text-gold-400 mb-5">
               Resources
             </h3>
@@ -124,16 +125,16 @@ export default function Footer() {
                 <li key={l.to}>
                   <Link
                     to={l.to}
-                    className="text-stone-300/90 hover:text-gold-400 transition text-[14px]"
+                    className="link-underline text-stone-300/90 hover:text-gold-400 transition text-[14px]"
                   >
                     {l.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </StaggerItem>
 
-          <div>
+          <StaggerItem>
             <h3 className="text-[11px] uppercase tracking-[0.24em] text-gold-400 mb-5">
               Connect
             </h3>
@@ -168,7 +169,7 @@ export default function Footer() {
                   onClick={(e) => {
                     if (placeholder) e.preventDefault()
                   }}
-                  className="h-11 w-11 inline-flex items-center justify-center border border-white/12 text-stone-300 hover:border-gold-500 hover:text-gold-400 transition"
+                  className="h-11 w-11 inline-flex items-center justify-center border border-white/12 text-stone-300 hover:border-gold-500 hover:text-gold-400 hover:-translate-y-0.5 transition-all duration-300"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
@@ -180,7 +181,7 @@ export default function Footer() {
                 href={company.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gold-400 hover:text-gold-300 transition"
+                className="link-underline text-gold-400 hover:text-gold-300 transition"
               >
                 {company.instagram}
               </a>
@@ -188,14 +189,14 @@ export default function Footer() {
             <p className="mt-3 text-sm text-stone-400">Email Us</p>
             <a
               href={`mailto:${company.email}`}
-              className="text-sm text-stone-200 hover:text-gold-400 transition"
+              className="link-underline text-sm text-stone-200 hover:text-gold-400 transition"
             >
               {company.email}
             </a>
             <p className="mt-3 text-sm text-stone-400">Call Us</p>
             <a
               href={`tel:${company.phone}`}
-              className="text-sm text-stone-200 hover:text-gold-400 transition max-sm:block"
+              className="link-underline text-sm text-stone-200 hover:text-gold-400 transition max-sm:block"
             >
               {company.displayPhone}
             </a>
@@ -205,17 +206,17 @@ export default function Footer() {
             >
               Get Free Quote
             </Link>
-          </div>
-        </div>
+          </StaggerItem>
+        </StaggerContainer>
 
-        <div className="mt-14 pt-7 border-t border-white/[0.08] flex flex-col md:flex-row gap-3 md:items-center md:justify-between text-[12px] text-stone-500">
+        <Reveal direction="fade" delay={0.1} className="mt-14 pt-7 border-t border-white/[0.08] flex flex-col md:flex-row gap-3 md:items-center md:justify-between text-[12px] text-stone-500">
           <p>
             © {year} {company.name}. All rights reserved.
           </p>
           <p className="font-display italic text-[13px] text-stone-400">
             {company.marathiTaglineEnglish}
           </p>
-        </div>
+        </Reveal>
       </div>
     </footer>
   )

@@ -1,16 +1,24 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowUpRight, MapPin } from 'lucide-react'
+import { fadeUp } from '../motion/variants'
+import { EASE, DURATION, STAGGER } from '../motion/tokens'
 
 export default function ProjectCard({ project, index = 0 }) {
+  const reduceMotion = useReducedMotion()
+
   return (
     <motion.article
       layout
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
+      variants={fadeUp}
+      custom={index * STAGGER.fast}
+      initial={reduceMotion ? false : 'hidden'}
+      whileInView="visible"
+      viewport={{ once: true, margin: '-40px' }}
       exit={{ opacity: 0, scale: 0.98 }}
-      transition={{ delay: index * 0.05, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative min-w-0 w-full overflow-hidden bg-navy-950 rounded-[14px] sm:rounded-none"
+      whileHover={reduceMotion ? undefined : { y: -4 }}
+      transition={{ duration: DURATION.reveal, ease: EASE }}
+      className="group relative min-w-0 w-full overflow-hidden bg-navy-950 rounded-[14px] sm:rounded-none hover-lift"
     >
       <Link to={`/projects/${project.id}`} className="block">
         <div className="relative aspect-[4/3] overflow-hidden">
@@ -18,7 +26,7 @@ export default function ProjectCard({ project, index = 0 }) {
             src={project.mainImage}
             alt={`${project.name} — ${project.type.toLowerCase()} construction by MK Construction in ${project.location}, Pune`}
             loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-[1.15s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
+            className="h-full w-full object-cover transition-transform duration-[1.15s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-navy-950/10" />
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-navy-950/25" />
@@ -44,7 +52,7 @@ export default function ProjectCard({ project, index = 0 }) {
             </h3>
             <span className="project-card-cta mt-2.5 inline-flex items-center gap-1.5 min-h-9 text-[11px] uppercase tracking-[0.18em] text-stone-200 sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 transition-all duration-400">
               View Project
-              <ArrowUpRight className="h-3.5 w-3.5" />
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
           </div>
         </div>

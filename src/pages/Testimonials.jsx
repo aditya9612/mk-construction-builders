@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import { testimonials } from '../data/testimonials'
 import { pageSeo } from '../data/seo'
+import { fadeUp } from '../motion/variants'
+import { EASE, DURATION } from '../motion/tokens'
 
 function TestimonialCarousel({ items }) {
   const [index, setIndex] = useState(0)
   const current = items[index]
+  const reduceMotion = useReducedMotion()
 
   useEffect(() => {
     if (items.length <= 1) return undefined
@@ -28,11 +31,13 @@ function TestimonialCarousel({ items }) {
       <AnimatePresence mode="wait">
         <motion.blockquote
           key={current.id}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          variants={fadeUp}
+          custom={0}
+          initial={reduceMotion ? false : 'hidden'}
+          animate="visible"
           exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="border border-stone-200 bg-white rounded-[16px] p-6 sm:p-8 md:p-10 shadow-[var(--shadow-soft)] min-h-[220px]"
+          transition={{ duration: DURATION.reveal, ease: EASE }}
+          className="border border-stone-200 bg-white rounded-[16px] p-6 sm:p-8 md:p-10 shadow-[var(--shadow-soft)] min-h-[220px] hover-lift"
         >
           {current.rating != null && (
             <div className="flex gap-1 mb-4" aria-label={`Rated ${current.rating} out of 5`}>
@@ -97,6 +102,7 @@ function TestimonialCarousel({ items }) {
 
 export default function Testimonials() {
   const seo = pageSeo.testimonials
+  const reduceMotion = useReducedMotion()
 
   return (
     <>
@@ -132,17 +138,24 @@ export default function Testimonials() {
                 <TestimonialCarousel items={testimonials} />
               </div>
               <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-                {testimonials.map((t) => (
-                  <blockquote
+                {testimonials.map((t, index) => (
+                  <motion.blockquote
                     key={t.id}
-                    className="border border-stone-200 bg-white p-6"
+                    variants={fadeUp}
+                    custom={index * 0.06}
+                    initial={reduceMotion ? false : 'hidden'}
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    whileHover={reduceMotion ? undefined : { y: -4 }}
+                    transition={{ duration: DURATION.reveal, ease: EASE }}
+                    className="border border-stone-200 bg-white p-6 hover-lift transition-shadow duration-300 hover:shadow-[var(--shadow-soft)]"
                   >
                     <p className="text-navy-800 leading-relaxed">“{t.quote}”</p>
                     <footer className="mt-4 text-sm text-navy-700/70">
                       — {t.name}
                       {t.location ? `, ${t.location}` : ''}
                     </footer>
-                  </blockquote>
+                  </motion.blockquote>
                 ))}
               </div>
             </>

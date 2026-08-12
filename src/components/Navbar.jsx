@@ -161,7 +161,7 @@ export default function Navbar() {
           >
             <Link
               to="/"
-              className="shrink-0 bg-white p-1 sm:p-1.5 shadow-sm max-w-[48%] sm:max-w-none"
+              className="site-header__logo shrink-0 bg-white p-1 sm:p-1.5 shadow-sm max-w-[48%] sm:max-w-none"
               aria-label="MK Construction & Builders — Home"
             >
               <img

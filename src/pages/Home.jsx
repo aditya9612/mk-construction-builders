@@ -1,47 +1,20 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Hero from '../components/Hero'
 import Seo from '../components/Seo'
 import SectionTitle from '../components/SectionTitle'
-import StatCard from '../components/StatCard'
+import HomeStatsBand from '../components/HomeStatsBand'
 import ServiceCard from '../components/ServiceCard'
 import ProjectCard from '../components/ProjectCard'
 import FounderSection from '../components/FounderSection'
 import QualitySection from '../components/QualitySection'
 import LocationsSection from '../components/LocationsSection'
 import ProcessTimeline from '../components/ProcessTimeline'
+import { Reveal, ImageReveal } from '../components/motion/Reveal'
 import { company } from '../data/company'
 import { services } from '../data/services'
 import { projects } from '../data/projects'
 import { pageSeo } from '../data/seo'
-
-const puneServices = [
-  {
-    title: 'Residential construction',
-    text: 'End-to-end home building with clear planning, quality materials focus and structured site supervision.',
-  },
-  {
-    title: 'House construction',
-    text: 'Complete house construction support — from layout discussion and estimation through execution and handover.',
-  },
-  {
-    title: 'Building construction',
-    text: 'Building projects managed with professional handling, transparent communication and quality checks.',
-  },
-  {
-    title: 'Renovation',
-    text: 'Renovation and upgrade work for existing homes and spaces, planned around site conditions and timelines.',
-  },
-  {
-    title: 'Project planning & site execution',
-    text: 'Requirement discussion, planning coordination and disciplined on-site execution for predictable progress.',
-  },
-  {
-    title: 'Quality & timely completion',
-    text: 'Quality-focused construction with an emphasis on trust and on-time delivery across Pune projects.',
-  },
-]
 
 export default function Home() {
   const featuredProjects = projects.slice(0, 6)
@@ -59,40 +32,20 @@ export default function Home() {
 
       <Hero />
 
-      <section className="stats-band relative z-10 pb-6 md:pb-8">
-        <div className="container-arch">
-          <div className="grid grid-cols-1 min-[420px]:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
-            <div className="min-w-0">
-              <StatCard value={company.projects} label="Projects" index={0} />
-            </div>
-            <div className="min-w-0">
-              <StatCard
-                value={company.qualityChecks}
-                label="Quality Checks"
-                index={1}
-              />
-            </div>
-            <div className="min-w-0">
-              <StatCard value="Quality First" label="Our Priority" index={2} />
-            </div>
-            <div className="min-w-0">
-              <StatCard value="On-Time Focus" label="Delivery Promise" index={3} />
-            </div>
-            <div className="min-w-0 min-[420px]:col-span-2 lg:col-span-1">
-              <StatCard value="Customer Trust" label="Core Value" index={4} />
-            </div>
-          </div>
-        </div>
-      </section>
+      <FounderSection />
+
+      <HomeStatsBand />
 
       <section className="section-pad">
         <div className="container-arch">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12 lg:gap-16 xl:gap-20 items-center">
-            <div className="min-w-0 max-w-full">
+            <Reveal direction="left" className="min-w-0 max-w-full">
               <SectionTitle
                 eyebrow="About Us"
                 title={`About ${company.name}`}
                 subtitle={company.marathiTagline}
+                className="mb-6 md:mb-8"
+                noReveal
               />
               <p className="text-navy-700/75 leading-relaxed text-[15px] break-words">
                 {company.marathiTaglineEnglish}
@@ -112,15 +65,9 @@ export default function Home() {
                   View our construction services
                 </Link>
               </div>
-            </div>
-            <motion.div
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="arch-frame min-w-0 w-full"
-            >
-              <div className="image-reveal aspect-[4/3] w-full">
+            </Reveal>
+            <ImageReveal direction="right" className="arch-frame min-w-0 w-full">
+              <div className="aspect-[4/3] w-full">
                 <img
                   src={company.images.about}
                   alt={`${company.name} residential building project in Pune`}
@@ -128,7 +75,7 @@ export default function Home() {
                   loading="lazy"
                 />
               </div>
-            </motion.div>
+            </ImageReveal>
           </div>
         </div>
       </section>
@@ -185,47 +132,13 @@ export default function Home() {
             ))}
           </div>
           <div className="mt-10 flex flex-wrap gap-4">
-            <Link to="/gallery" className="text-gold-400 hover:text-gold-300 text-[13px] uppercase tracking-[0.16em] min-h-11 inline-flex items-center">
+            <Link to="/gallery" className="link-underline text-gold-400 hover:text-gold-300 text-[13px] uppercase tracking-[0.16em] min-h-11 inline-flex items-center">
               Browse project gallery
             </Link>
-            <Link to="/packages" className="text-stone-300 hover:text-gold-400 text-[13px] uppercase tracking-[0.16em] min-h-11 inline-flex items-center">
+            <Link to="/packages" className="link-underline text-stone-300 hover:text-gold-400 text-[13px] uppercase tracking-[0.16em] min-h-11 inline-flex items-center">
               View construction packages
             </Link>
           </div>
-        </div>
-      </section>
-
-      <section className="section-pad">
-        <div className="container-arch">
-          <SectionTitle
-            eyebrow="Local expertise"
-            title="Construction Services in Pune"
-            subtitle={`${company.name} supports homeowners and project partners across Pune with practical construction solutions — from planning to site execution.`}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
-            {puneServices.map((item) => (
-              <article
-                key={item.title}
-                className="border border-stone-200 bg-white p-6 sm:p-7 rounded-[14px] sm:rounded-none min-w-0"
-              >
-                <h3 className="font-display text-[1.35rem] sm:text-xl text-navy-900 font-semibold break-words">
-                  {item.title}
-                </h3>
-                <p className="mt-3 text-[14px] sm:text-[15px] text-navy-700/75 leading-relaxed break-words">
-                  {item.text}
-                </p>
-              </article>
-            ))}
-          </div>
-          <p className="mt-8 text-[15px] text-navy-700/75 leading-relaxed max-w-3xl">
-            Whether you need a new home, renovation support or a building contractor
-            in Pune, our team focuses on clear communication, quality workmanship and
-            timely completion. Looking ahead?{' '}
-            <Link to="/contact" className="text-gold-600 hover:text-gold-500 transition">
-              Contact MK Construction &amp; Builders
-            </Link>{' '}
-            to discuss your site and requirements.
-          </p>
         </div>
       </section>
 
@@ -249,8 +162,6 @@ export default function Home() {
         </div>
       </section>
 
-      <FounderSection />
-
       <QualitySection
         eyebrow="Why choose us"
         title="Why Choose MK Construction"
@@ -265,7 +176,7 @@ export default function Home() {
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-30 bg-[radial-gradient(ellipse_at_center,rgba(196,151,47,0.18),transparent_60%)]"
         />
-        <div className="container-arch relative text-center min-w-0">
+        <Reveal direction="up" className="container-arch relative text-center min-w-0">
           <p className="text-[11px] uppercase tracking-[0.18em] sm:tracking-[0.28em] text-gold-400 mb-5">
             Begin your project
           </p>
@@ -284,7 +195,7 @@ export default function Home() {
               Contact MK Construction &amp; Builders
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
     </>
   )

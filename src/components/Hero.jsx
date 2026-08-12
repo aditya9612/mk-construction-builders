@@ -1,19 +1,17 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight, Phone, MessageCircle } from 'lucide-react'
 import { company } from '../data/company'
 import { getEnquiryMessage, isWhatsAppConfigured, openWhatsApp } from '../utils/whatsapp'
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  show: (delay = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.85, delay, ease: [0.16, 1, 0.3, 1] },
-  }),
-}
+import { fadeUp, heroBackground, lineReveal } from '../motion/variants'
+import { EASE, DURATION } from '../motion/tokens'
 
 export default function Hero() {
+  const reduceMotion = useReducedMotion()
+  const { scrollY } = useScroll()
+  const bgY = useTransform(scrollY, [0, 600], [0, reduceMotion ? 0 : 40])
+  const bgScale = useTransform(scrollY, [0, 600], [1, reduceMotion ? 1 : 1.04])
+
   const handleWhatsApp = () => {
     if (!isWhatsAppConfigured()) {
       window.alert(`WhatsApp number placeholder: ${company.whatsapp}`)
@@ -25,21 +23,30 @@ export default function Hero() {
   return (
     <section className="hero-section relative flex items-end bg-navy-950">
       <div className="absolute inset-0 overflow-hidden">
-        <motion.img
-          src={company.images.hero}
-          alt="Modern residential construction project by MK Construction & Builders in Pune"
-          className="h-full w-full object-cover object-center max-md:object-[center_30%]"
-          initial={{ scale: 1.08 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 8, ease: [0.16, 1, 0.3, 1] }}
-        />
+        <motion.div
+          className="h-full w-full"
+          style={reduceMotion ? undefined : { y: bgY, scale: bgScale }}
+        >
+          <motion.img
+            src={company.images.hero}
+            alt="Modern residential construction project by MK Construction & Builders in Pune"
+            className="h-full w-full object-cover object-center max-md:object-[center_30%]"
+            variants={heroBackground}
+            initial={reduceMotion ? false : 'hidden'}
+            animate="visible"
+          />
+        </motion.div>
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,10,16,0.55)_0%,rgba(5,10,16,0.72)_42%,rgba(5,10,16,0.94)_100%)] md:bg-[linear-gradient(105deg,rgba(5,10,16,0.92)_0%,rgba(5,10,16,0.72)_42%,rgba(5,10,16,0.35)_100%)]" />
         <div className="absolute inset-0 hidden md:block bg-gradient-to-t from-navy-950 via-navy-950/25 to-navy-950/20" />
         <div className="absolute inset-0 grain" />
       </div>
 
-      <div
+      <motion.div
         aria-hidden
+        initial={reduceMotion ? false : { scaleY: 0, opacity: 0.4 }}
+        animate={{ scaleY: 1, opacity: 1 }}
+        transition={{ duration: DURATION.hero, delay: 0.3, ease: EASE }}
+        style={{ transformOrigin: 'top center' }}
         className="pointer-events-none absolute inset-y-0 left-[8%] hidden lg:block w-px bg-gradient-to-b from-transparent via-gold-500/35 to-transparent"
       />
 
@@ -48,11 +55,17 @@ export default function Hero() {
           <motion.div
             custom={0.15}
             variants={fadeUp}
-            initial="hidden"
-            animate="show"
+            initial={reduceMotion ? false : 'hidden'}
+            animate="visible"
             className="mb-4 sm:mb-5 flex items-center gap-3 sm:gap-4 min-w-0"
           >
-            <span className="arch-rule" />
+            <motion.span
+              custom={0.12}
+              variants={lineReveal}
+              initial={reduceMotion ? false : 'hidden'}
+              animate="visible"
+              className="arch-rule origin-left"
+            />
             <span className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] sm:tracking-[0.28em] text-gold-400/90 break-words">
               Pune · Maharashtra · Trust · Quality · On-Time
             </span>
@@ -61,8 +74,8 @@ export default function Hero() {
           <motion.h1
             custom={0.22}
             variants={fadeUp}
-            initial="hidden"
-            animate="show"
+            initial={reduceMotion ? false : 'hidden'}
+            animate="visible"
             className="max-w-full break-words text-balance"
           >
             <span className="block font-display text-[1.15rem] sm:text-xl md:text-3xl lg:text-4xl text-stone-50/95 font-medium tracking-[0.01em] mb-3 sm:mb-4 md:mb-3">
@@ -78,8 +91,8 @@ export default function Hero() {
           <motion.p
             custom={0.35}
             variants={fadeUp}
-            initial="hidden"
-            animate="show"
+            initial={reduceMotion ? false : 'hidden'}
+            animate="visible"
             className="hero-sub mt-4 sm:mt-5 max-w-xl text-stone-300/95 leading-relaxed break-words"
           >
             {company.heroSubheading}
@@ -88,8 +101,8 @@ export default function Hero() {
           <motion.div
             custom={0.45}
             variants={fadeUp}
-            initial="hidden"
-            animate="show"
+            initial={reduceMotion ? false : 'hidden'}
+            animate="visible"
             className="mt-6 sm:mt-7 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 w-full"
           >
             <Link to="/projects" className="btn-primary w-full sm:w-auto min-h-[50px]">
@@ -104,8 +117,8 @@ export default function Hero() {
           <motion.div
             custom={0.55}
             variants={fadeUp}
-            initial="hidden"
-            animate="show"
+            initial={reduceMotion ? false : 'hidden'}
+            animate="visible"
             className="mt-5 hidden sm:flex flex-wrap items-center gap-x-6 gap-y-3"
           >
             <a
@@ -129,8 +142,8 @@ export default function Hero() {
           <motion.p
             custom={0.65}
             variants={fadeUp}
-            initial="hidden"
-            animate="show"
+            initial={reduceMotion ? false : 'hidden'}
+            animate="visible"
             className="mt-5 sm:mt-6 max-w-lg text-[15px] md:text-lg text-stone-400/90 font-display italic leading-relaxed break-words"
           >
             {company.marathiTagline}
@@ -140,15 +153,21 @@ export default function Hero() {
 
       <motion.div
         aria-hidden
-        initial={{ opacity: 0 }}
+        initial={reduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.1, duration: 0.8 }}
+        transition={{ delay: 1.1, duration: 0.8, ease: EASE }}
         className="pointer-events-none absolute bottom-5 right-4 md:right-8 hidden md:flex flex-col items-center gap-2"
       >
         <span className="text-[10px] uppercase tracking-[0.28em] text-stone-400 [writing-mode:vertical-rl] rotate-180">
           Scroll
         </span>
-        <span className="h-12 w-px bg-gradient-to-b from-gold-500 to-transparent" />
+        <motion.span
+          initial={reduceMotion ? false : { scaleY: 0 }}
+          animate={{ scaleY: 1 }}
+          transition={{ delay: 1.2, duration: 0.8, ease: EASE }}
+          style={{ transformOrigin: 'top center' }}
+          className="h-12 w-px bg-gradient-to-b from-gold-500 to-transparent block"
+        />
       </motion.div>
     </section>
   )

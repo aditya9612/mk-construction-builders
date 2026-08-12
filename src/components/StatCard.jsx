@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
-import { useInView, motion } from 'framer-motion'
+import { useRef } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { cn } from '../utils/formatters'
+import { useCountUp, useInViewOnce } from '../hooks/useCountUp'
+import { fadeUp } from '../motion/variants'
+import { EASE, DURATION, STAGGER } from '../motion/tokens'
 
 function parseStat(value) {
   if (typeof value !== 'string') return { num: null, suffix: '', label: value }
@@ -11,37 +14,26 @@ function parseStat(value) {
 
 export default function StatCard({ value, label, index = 0, variant = 'dark' }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-40px' })
+  const inView = useInViewOnce(ref)
+  const reduceMotion = useReducedMotion()
   const { num, suffix, label: display } = parseStat(value)
-  const [count, setCount] = useState(0)
   const isNumeric = num != null
-
-  useEffect(() => {
-    if (!inView || !isNumeric) return
-    let frame
-    const duration = 1500
-    const start = performance.now()
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setCount(Math.round(num * eased))
-      if (progress < 1) frame = requestAnimationFrame(tick)
-    }
-    frame = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(frame)
-  }, [inView, isNumeric, num])
+  const count = useCountUp(num, { enabled: inView && isNumeric })
 
   const isDark = variant === 'dark'
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 22 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.08, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+      variants={fadeUp}
+      custom={index * STAGGER.normal}
+      initial={reduceMotion ? false : 'hidden'}
+      whileInView="visible"
+      viewport={{ once: true, margin: '-40px' }}
+      whileHover={reduceMotion ? undefined : { y: -3 }}
+      transition={{ duration: DURATION.reveal, ease: EASE }}
       className={cn(
-        'relative h-full min-w-0 w-full px-4 py-6 sm:px-5 sm:py-7 md:px-6 md:py-9',
+        'relative h-full min-w-0 w-full px-4 py-6 sm:px-5 sm:py-7 md:px-6 md:py-9 hover-lift',
         isDark
           ? 'border border-white/10 bg-navy-900/80 backdrop-blur-md'
           : 'border border-stone-200/80 bg-white shadow-[var(--shadow-soft)]',

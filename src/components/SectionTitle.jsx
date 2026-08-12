@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion'
 import { cn } from '../utils/formatters'
+import { LineReveal, Reveal } from './motion/Reveal'
 
 export default function SectionTitle({
   eyebrow,
@@ -8,22 +8,13 @@ export default function SectionTitle({
   align = 'left',
   light = false,
   className,
+  noReveal = false,
 }) {
   const alignClass =
     align === 'center' ? 'text-center mx-auto items-center' : 'text-left items-start'
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className={cn(
-        'flex flex-col w-full min-w-0 max-w-3xl mb-10 md:mb-14 lg:mb-16',
-        alignClass,
-        className,
-      )}
-    >
+  const content = (
+    <>
       {eyebrow && (
         <span
           className={cn(
@@ -53,13 +44,38 @@ export default function SectionTitle({
           {subtitle}
         </p>
       )}
+      <LineReveal
+        className={cn('mt-5 sm:mt-6', align === 'center' && 'mx-auto')}
+        light={light}
+        delay={noReveal ? 0 : 0.12}
+      />
+    </>
+  )
+
+  if (noReveal) {
+    return (
       <div
         className={cn(
-          'mt-5 sm:mt-6 arch-rule',
-          light && 'bg-gold-400/80',
-          align === 'center' && 'mx-auto',
+          'flex flex-col w-full min-w-0 max-w-3xl mb-10 md:mb-14 lg:mb-16',
+          alignClass,
+          className,
         )}
-      />
-    </motion.div>
+      >
+        {content}
+      </div>
+    )
+  }
+
+  return (
+    <Reveal
+      direction="up"
+      className={cn(
+        'flex flex-col w-full min-w-0 max-w-3xl mb-10 md:mb-14 lg:mb-16',
+        alignClass,
+        className,
+      )}
+    >
+      {content}
+    </Reveal>
   )
 }
