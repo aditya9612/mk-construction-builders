@@ -5,7 +5,7 @@ export const processSteps = [
     title: 'Requirement Discussion',
     description:
       'Understand project goals, preferences and expectations clearly.',
-    image: '/images/handover/mk-construction-pune-client-project-handover-02.webp',
+    image: '/images/process/mk-construction-pune-requirement-discussion.webp',
     imageAlt:
       'MK Construction team discussing residential project requirements with clients',
     objectPosition: 'center 22%',
@@ -16,7 +16,7 @@ export const processSteps = [
     title: 'Site Visit',
     description:
       'Review site conditions to prepare informed planning and estimation.',
-    image: '/images/site/mk-construction-pune-site-inspection-team.webp',
+    image: '/images/process/mk-construction-pune-site-visit.webp',
     imageAlt:
       'Construction professionals inspecting a Pune building site during a site visit',
     objectPosition: 'center 20%',
@@ -27,7 +27,7 @@ export const processSteps = [
     title: 'Planning & Design',
     description:
       'Shape planning and design direction based on requirements.',
-    image: '/images/site/mk-construction-pune-site-supervision-blueprints.webp',
+    image: '/images/process/mk-construction-pune-planning-design.webp',
     imageAlt:
       'Architectural planning and structural drawings reviewed on a construction site',
     objectPosition: 'center 20%',
@@ -38,7 +38,7 @@ export const processSteps = [
     title: 'Estimation',
     description:
       'Prepare quotation discussions based on scope, materials and site needs.',
-    image: '/images/site/mk-construction-pune-construction-site-supervision.webp',
+    image: '/images/process/mk-construction-pune-estimation.webp',
     imageAlt:
       'Construction supervisor reviewing site scope for project estimation',
     objectPosition: 'center',
@@ -49,7 +49,7 @@ export const processSteps = [
     title: 'Project Execution',
     description:
       'Execute construction with quality focus and structured handling.',
-    image: '/images/construction/mk-construction-pune-rcc-reinforcement-work.webp',
+    image: '/images/process/mk-construction-pune-project-execution.webp',
     imageAlt:
       'Active RCC reinforcement and structural construction work on site',
     objectPosition: 'center',
