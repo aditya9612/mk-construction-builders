@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { MapPin } from 'lucide-react'
-import { locations, mapsPlaceholder } from '../data/locations'
+import { locations, businessLocation } from '../data/locations'
 import SectionTitle from './SectionTitle'
 import { Reveal } from './motion/Reveal'
 import { fadeUp } from '../motion/variants'
@@ -41,13 +41,36 @@ export default function LocationsSection() {
           ))}
         </div>
 
-        <Reveal direction="up" delay={0.1} className="mt-12 md:mt-14 border border-stone-200 bg-white p-6 sm:p-8 md:p-10 text-center rounded-[14px] sm:rounded-none hover-lift">
-          <p className="font-display text-[clamp(1.35rem,5vw,1.875rem)] md:text-3xl text-navy-900 leading-snug">
-            {mapsPlaceholder.label}
+        <Reveal direction="up" delay={0.1} className="mt-12 md:mt-14 border border-stone-200 bg-white p-6 sm:p-8 md:p-10 text-center rounded-[14px] sm:rounded-none hover-lift min-w-0">
+          <p className="font-display text-[clamp(1.35rem,5vw,1.875rem)] md:text-3xl text-navy-900 leading-snug break-words">
+            <span aria-hidden="true">📍 </span>
+            {businessLocation.name}
           </p>
-          <p className="mt-2 text-[14px] text-navy-700/65 leading-relaxed">{mapsPlaceholder.note}</p>
-          <div className="mt-7 aspect-[16/10] sm:aspect-[21/9] bg-stone-100 border border-stone-200/80 flex items-center justify-center text-navy-700/45 text-[12px] sm:text-[13px] tracking-wide px-4 text-balance overflow-hidden image-reveal">
-            Google Maps placeholder — embed URL can be added later
+          <p className="mt-2 text-[14px] text-navy-700/65 leading-relaxed break-words">
+            {businessLocation.addressLines.map((line, index) => (
+              <span key={line}>
+                {line}
+                {index < businessLocation.addressLines.length - 1 && <br />}
+              </span>
+            ))}
+          </p>
+          <a
+            href={businessLocation.directionsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary mt-5 inline-flex min-h-[50px] items-center justify-center mx-auto w-full sm:w-auto max-w-full px-6"
+          >
+            Get Directions
+          </a>
+          <div className="mt-7 aspect-[16/10] sm:aspect-[21/9] bg-stone-100 border border-stone-200/80 overflow-hidden image-reveal w-full max-w-full min-w-0">
+            <iframe
+              src={businessLocation.embedUrl}
+              title={`${businessLocation.name} location`}
+              className="h-full w-full border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
           </div>
         </Reveal>
       </div>
