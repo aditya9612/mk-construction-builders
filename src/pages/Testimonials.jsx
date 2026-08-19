@@ -4,7 +4,9 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
 import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
+import CustomerReviews from '../components/CustomerReviews'
 import { testimonials } from '../data/testimonials'
+import { reviews } from '../data/reviews'
 import { pageSeo } from '../data/seo'
 import { fadeUp } from '../motion/variants'
 import { EASE, DURATION } from '../motion/tokens'
@@ -110,29 +112,23 @@ export default function Testimonials() {
       <PageHero
         eyebrow="Voice of Clients"
         title="Testimonials"
-        subtitle="Client feedback for MK Construction & Builders will appear here once provided."
+        subtitle={
+          reviews.length > 0
+            ? 'Real Google reviews from customers who experienced MK Construction & Builders.'
+            : 'Client feedback for MK Construction & Builders will appear here once provided.'
+        }
         crumbs={[{ label: 'Testimonials' }]}
       />
+      {reviews.length > 0 && (
+        <CustomerReviews
+          className="section-pad bg-stone-50 pt-0 md:pt-0"
+          showTitle={false}
+          showCta
+        />
+      )}
+      {testimonials.length > 0 && (
       <section className="section-pad">
         <div className="container-arch">
-          {testimonials.length === 0 ? (
-            <div className="border border-dashed border-stone-300 bg-white p-8 sm:p-12 md:p-16 text-center rounded-[14px] sm:rounded-none">
-              <p className="font-display text-[clamp(1.5rem,6vw,2.5rem)] text-navy-900 leading-snug">
-                Client testimonials will be added here.
-              </p>
-              <p className="mt-4 text-sm text-navy-700/70 leading-relaxed max-w-lg mx-auto">
-                Meanwhile, you can{' '}
-                <Link to="/projects" className="text-gold-600 hover:text-gold-500 transition">
-                  explore our projects
-                </Link>{' '}
-                or{' '}
-                <Link to="/contact" className="text-gold-600 hover:text-gold-500 transition">
-                  contact MK Construction &amp; Builders
-                </Link>{' '}
-                about your Pune construction requirement.
-              </p>
-            </div>
-          ) : (
             <>
               <div className="md:hidden">
                 <TestimonialCarousel items={testimonials} />
@@ -159,9 +155,31 @@ export default function Testimonials() {
                 ))}
               </div>
             </>
-          )}
         </div>
       </section>
+      )}
+      {testimonials.length === 0 && reviews.length === 0 && (
+      <section className="section-pad">
+        <div className="container-arch">
+            <div className="border border-dashed border-stone-300 bg-white p-8 sm:p-12 md:p-16 text-center rounded-[14px] sm:rounded-none">
+              <p className="font-display text-[clamp(1.5rem,6vw,2.5rem)] text-navy-900 leading-snug">
+                Client testimonials will be added here.
+              </p>
+              <p className="mt-4 text-sm text-navy-700/70 leading-relaxed max-w-lg mx-auto">
+                Meanwhile, you can{' '}
+                <Link to="/projects" className="text-gold-600 hover:text-gold-500 transition">
+                  explore our projects
+                </Link>{' '}
+                or{' '}
+                <Link to="/contact" className="text-gold-600 hover:text-gold-500 transition">
+                  contact MK Construction &amp; Builders
+                </Link>{' '}
+                about your Pune construction requirement.
+              </p>
+            </div>
+        </div>
+      </section>
+      )}
     </>
   )
 }

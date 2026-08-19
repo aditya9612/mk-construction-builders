@@ -10,6 +10,7 @@ import FounderSection from '../components/FounderSection'
 import QualitySection from '../components/QualitySection'
 import LocationsSection from '../components/LocationsSection'
 import ProcessTimeline from '../components/ProcessTimeline'
+import CustomerReviews from '../components/CustomerReviews'
 import { Reveal, ImageReveal } from '../components/motion/Reveal'
 import { company } from '../data/company'
 import { services } from '../data/services'
@@ -141,6 +142,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <CustomerReviews />
 
       <section className="section-pad bg-stone-50">
         <div className="container-arch">
