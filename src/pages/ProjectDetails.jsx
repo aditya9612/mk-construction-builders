@@ -1,48 +1,124 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { MapPin } from 'lucide-react'
 import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import Lightbox from '../components/Lightbox'
-import { getProjectById } from '../data/projects'
 import { pageSeo, projectSeo } from '../data/seo'
+import usePortfolioProject from '../hooks/usePortfolioProject'
+
+function ProjectDetailsSkeleton() {
+  return (
+    <>
+      <PageHero
+        title="Loading project"
+        crumbs={[
+          { label: 'Projects', to: '/projects' },
+          { label: 'Loading' },
+        ]}
+      />
+      <section className="section-pad">
+        <div className="container-arch space-y-10 md:space-y-14 min-w-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-w-0">
+            <div className="w-full aspect-[4/3] animate-pulse bg-stone-200 border border-stone-200" />
+            <div className="min-w-0 space-y-4">
+              <div className="h-8 w-2/3 animate-pulse bg-stone-200" />
+              <div className="h-4 w-1/3 animate-pulse bg-stone-200" />
+              <div className="h-20 w-full animate-pulse bg-stone-200" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  )
+}
+
+function ProjectNotFound() {
+  return (
+    <>
+      <Seo
+        title={pageSeo.notFound.title}
+        description={pageSeo.notFound.description}
+        path="/projects"
+        noindex
+      />
+      <PageHero
+        title="Project not found"
+        crumbs={[
+          { label: 'Projects', to: '/projects' },
+          { label: 'Not found' },
+        ]}
+      />
+      <div className="container-arch py-16 text-center">
+        <p>This project does not exist.</p>
+        <Link to="/projects" className="mt-4 inline-block text-gold-600">
+          Explore our projects
+        </Link>
+      </div>
+    </>
+  )
+}
 
 export default function ProjectDetails() {
   const { id } = useParams()
-  const project = getProjectById(id)
+  const { project, loading, error, reload } = usePortfolioProject(id)
   const [lightboxIndex, setLightboxIndex] = useState(null)
 
-  if (!project) {
+  useEffect(() => {
+    setLightboxIndex(null)
+  }, [id])
+
+  if (loading && !project) {
     return (
       <>
         <Seo
-          title={pageSeo.notFound.title}
-          description={pageSeo.notFound.description}
+          title={pageSeo.projects.title}
+          description={pageSeo.projects.description}
           path="/projects"
-          noindex
         />
-        <PageHero
-          title="Project not found"
-          crumbs={[
-            { label: 'Projects', to: '/projects' },
-            { label: 'Not found' },
-          ]}
-        />
-        <div className="container-arch py-16 text-center">
-          <p>This project does not exist.</p>
-          <Link to="/projects" className="mt-4 inline-block text-gold-600">
-            Explore our projects
-          </Link>
-        </div>
+        <ProjectDetailsSkeleton />
       </>
     )
   }
 
+  if (!project) {
+    if (error) {
+      return (
+        <>
+          <Seo
+            title={pageSeo.projects.title}
+            description={pageSeo.projects.description}
+            path="/projects"
+          />
+          <PageHero
+            title="Unable to load project"
+            crumbs={[
+              { label: 'Projects', to: '/projects' },
+              { label: 'Error' },
+            ]}
+          />
+          <div className="container-arch py-16 text-center">
+            <p className="text-navy-700/80">{error}</p>
+            <button
+              type="button"
+              onClick={reload}
+              className="mt-4 min-h-11 px-4 text-[11px] uppercase tracking-[0.16em] border border-stone-200 hover:border-gold-500 hover:text-gold-600 transition"
+            >
+              Retry
+            </button>
+          </div>
+        </>
+      )
+    }
+    return <ProjectNotFound />
+  }
+
   const seo = projectSeo(project)
+  const typeLabel = project.type || 'construction'
   const galleryItems = (project.gallery || []).map((src, i) => ({
     id: `${project.id}-${i}`,
     src,
-    caption: `MK Construction ${project.type.toLowerCase()} project in ${project.location}, Pune`,
+    caption: `MK Construction ${typeLabel.toLowerCase()} project in ${project.location}, Pune`,
     category: project.type,
   }))
 
@@ -61,10 +137,22 @@ export default function ProjectDetails() {
 
       <section className="section-pad">
         <div className="container-arch space-y-10 md:space-y-14 min-w-0">
+          {error ? (
+            <div className="border border-stone-200 bg-white px-4 py-3 text-sm text-navy-700/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p>{error} Showing saved project details.</p>
+              <button
+                type="button"
+                onClick={reload}
+                className="min-h-11 px-4 text-[11px] uppercase tracking-[0.16em] border border-stone-200 hover:border-gold-500 hover:text-gold-600 transition"
+              >
+                Retry
+              </button>
+            </div>
+          ) : null}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 min-w-0">
             <img
               src={project.mainImage}
-              alt={`MK Construction ${project.type.toLowerCase()} project in ${project.location}, Pune`}
+              alt={`MK Construction ${typeLabel.toLowerCase()} project in ${project.location}, Pune`}
               className="w-full max-w-full aspect-[4/3] object-cover border border-stone-200"
             />
             <div className="min-w-0">

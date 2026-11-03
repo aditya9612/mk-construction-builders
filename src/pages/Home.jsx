@@ -14,11 +14,27 @@ import CustomerReviews from '../components/CustomerReviews'
 import { Reveal, ImageReveal } from '../components/motion/Reveal'
 import { company } from '../data/company'
 import { services } from '../data/services'
-import { projects } from '../data/projects'
 import { pageSeo } from '../data/seo'
+import useFeaturedPortfolioProjects from '../hooks/useFeaturedPortfolioProjects'
+
+function FeaturedProjectSkeleton() {
+  return (
+    <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5 mt-10 md:mt-12">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div
+          key={index}
+          className="min-w-0 overflow-hidden bg-navy-900 rounded-[14px] sm:rounded-none"
+        >
+          <div className="aspect-[4/3] animate-pulse bg-navy-800" />
+        </div>
+      ))}
+    </div>
+  )
+}
 
 export default function Home() {
-  const featuredProjects = projects.slice(0, 6)
+  const { items: featuredProjects, loading: projectsLoading } =
+    useFeaturedPortfolioProjects(6)
   const featuredServices = services.slice(0, 6)
   const seo = pageSeo.home
 
@@ -125,13 +141,17 @@ export default function Home() {
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5 mt-10 md:mt-12">
-            {featuredProjects.map((project, index) => (
-              <div key={project.id} className="min-w-0">
-                <ProjectCard project={project} index={index} />
-              </div>
-            ))}
-          </div>
+          {projectsLoading && featuredProjects.length === 0 ? (
+            <FeaturedProjectSkeleton />
+          ) : (
+            <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5 mt-10 md:mt-12">
+              {featuredProjects.map((project, index) => (
+                <div key={project.id} className="min-w-0">
+                  <ProjectCard project={project} index={index} />
+                </div>
+              ))}
+            </div>
+          )}
           <div className="mt-10 flex flex-wrap gap-4">
             <Link to="/gallery" className="link-underline text-gold-400 hover:text-gold-300 text-[13px] uppercase tracking-[0.16em] min-h-11 inline-flex items-center">
               Browse project gallery
