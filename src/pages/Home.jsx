@@ -33,8 +33,12 @@ function FeaturedProjectSkeleton() {
 }
 
 export default function Home() {
-  const { items: featuredProjects, loading: projectsLoading } =
-    useFeaturedPortfolioProjects(6)
+  const {
+    items: featuredProjects,
+    loading: projectsLoading,
+    error: projectsError,
+    reload: reloadProjects,
+  } = useFeaturedPortfolioProjects(6)
   const featuredServices = services.slice(0, 6)
   const seo = pageSeo.home
 
@@ -133,7 +137,7 @@ export default function Home() {
               light
               eyebrow="Projects"
               title="Our Projects"
-              subtitle="A selection of construction projects represented across Pune. Explore the portfolio for residential, house and bungalow work."
+              subtitle="A selection of construction projects represented across Pune. Explore the published portfolio."
               className="mb-0 min-w-0"
             />
             <Link to="/projects" className="btn-ghost !text-gold-400 shrink-0 self-start md:self-auto md:mb-2 min-h-11">
@@ -141,8 +145,23 @@ export default function Home() {
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
-          {projectsLoading && featuredProjects.length === 0 ? (
+          {projectsError ? (
+            <div className="mt-10 md:mt-12 border border-white/10 bg-navy-900/50 px-4 py-3 text-sm text-stone-300/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p>{projectsError}</p>
+              <button
+                type="button"
+                onClick={reloadProjects}
+                className="min-h-11 px-4 text-[11px] uppercase tracking-[0.16em] border border-white/15 hover:border-gold-500 hover:text-gold-400 transition"
+              >
+                Retry
+              </button>
+            </div>
+          ) : projectsLoading && featuredProjects.length === 0 ? (
             <FeaturedProjectSkeleton />
+          ) : featuredProjects.length === 0 ? (
+            <div className="mt-10 md:mt-12 border border-white/10 bg-navy-900/50 p-12 text-center text-stone-300/80">
+              No published projects yet.
+            </div>
           ) : (
             <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-5 mt-10 md:mt-12">
               {featuredProjects.map((project, index) => (

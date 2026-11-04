@@ -1,11 +1,17 @@
 const DEFAULT_API_URL = 'https://api.mkconstruction.site'
 
-export const API_BASE_URL = (
-  import.meta.env.VITE_API_URL || DEFAULT_API_URL
-).replace(/\/$/, '')
+function resolveApiBaseUrl() {
+  const raw = import.meta.env.VITE_API_URL
+  const value = raw == null ? '' : String(raw).trim().replace(/\/$/, '')
+  if (value) return value
+  // Local empty VITE_API_URL → same-origin /api (Vite proxy). Production keeps the public API.
+  return import.meta.env.DEV ? '' : DEFAULT_API_URL
+}
+
+export const API_BASE_URL = resolveApiBaseUrl()
 
 export const MEDIA_BASE_URL = (
-  import.meta.env.VITE_MEDIA_URL || API_BASE_URL
+  import.meta.env.VITE_MEDIA_URL || DEFAULT_API_URL
 ).replace(/\/$/, '')
 
 export class ApiError extends Error {
@@ -31,7 +37,9 @@ function buildUrl(path, params) {
   const normalized = path.startsWith('http')
     ? path
     : `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`
-  const url = new URL(normalized)
+  const url = normalized.startsWith('http')
+    ? new URL(normalized)
+    : new URL(normalized, window.location.origin)
 
   if (params && typeof params === 'object') {
     Object.entries(params).forEach(([key, value]) => {

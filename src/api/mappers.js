@@ -4,17 +4,15 @@ const PROJECT_TYPE_LABELS = {
   residential: 'Residential',
   commercial: 'Commercial',
   industrial: 'Industrial',
-  bungalow: 'Bungalow',
-  house: 'House',
   renovation: 'Renovation',
   other: 'Other',
 }
 
 const PROJECT_STATUS_LABELS = {
   completed: 'Completed',
-  ongoing: 'Ongoing',
-  in_progress: 'Ongoing',
-  'in-progress': 'Ongoing',
+  ongoing: 'In progress',
+  in_progress: 'In progress',
+  'in-progress': 'In progress',
   planned: 'Planned',
   showcase: 'Showcase',
 }
@@ -22,24 +20,27 @@ const PROJECT_STATUS_LABELS = {
 const FILTER_TYPE_QUERY = {
   Residential: 'RESIDENTIAL',
   Commercial: 'COMMERCIAL',
+  Industrial: 'INDUSTRIAL',
+  Renovation: 'RENOVATION',
+  Other: 'OTHER',
 }
 
 const FILTER_STATUS_QUERY = {
+  Planned: 'PLANNED',
+  'In progress': 'IN_PROGRESS',
   Ongoing: 'IN_PROGRESS',
   Completed: 'COMPLETED',
+  Showcase: 'SHOWCASE',
 }
 
 const GALLERY_CATEGORY_LABELS = {
   projects: 'Projects',
-  site: 'Site Work',
+  site: 'Site',
   interior: 'Interior',
   exterior: 'Exterior',
   team: 'Team',
   other: 'Other',
-  construction: 'Construction',
-  events: 'Events',
-  'completed work': 'Completed Work',
-  'site work': 'Site Work',
+  'site work': 'Site',
 }
 
 function firstDefined(...values) {
@@ -54,15 +55,25 @@ function titleCaseFromEnum(value) {
     .replace(/\b\w/g, (char) => char.toUpperCase())
 }
 
-function pickMediaPath(media) {
-  if (media == null) return ''
+function pickMediaPath(media, depth = 0) {
+  if (media == null || depth > 3) return ''
   if (typeof media === 'string') return media
-  return firstDefined(
+  if (Array.isArray(media)) {
+    return pickMediaPath(media[0], depth + 1)
+  }
+  const direct = firstDefined(
     media.src,
     media.src_full,
+    media.srcFull,
     media.url,
     media.url_path,
     media.path,
+  )
+  if (direct) return direct
+  return firstDefined(
+    pickMediaPath(media.media, depth + 1),
+    pickMediaPath(media.file, depth + 1),
+    pickMediaPath(media.image, depth + 1),
   )
 }
 
@@ -139,6 +150,7 @@ export function mapPortfolioProject(item) {
       typeof item.main_image === 'string' ? item.main_image : pickMediaPath(item.main_image),
       item.cover_url,
       item.image_url,
+      item.main_image_url,
       typeof item.image === 'string' ? item.image : pickMediaPath(item.image),
       pickMediaPath(item.cover),
       pickMediaPath(item.main_media),
@@ -150,7 +162,9 @@ export function mapPortfolioProject(item) {
     ? item.gallery
     : Array.isArray(item.gallery_items)
       ? item.gallery_items
-      : []
+      : Array.isArray(item.images)
+        ? item.images
+        : []
 
   const gallery = gallerySource
     .slice()
@@ -228,8 +242,9 @@ export function portfolioQueryFromFilter(filter) {
 
 export function applyProjectFilter(list, filter) {
   if (!filter || filter === 'All') return list
-  if (filter === 'Ongoing' || filter === 'Completed') {
-    return list.filter((project) => project.status === filter)
+  if (FILTER_STATUS_QUERY[filter]) {
+    const mapped = filter === 'Ongoing' ? 'In progress' : filter
+    return list.filter((project) => project.status === mapped)
   }
   return list.filter((project) => project.type === filter)
 }

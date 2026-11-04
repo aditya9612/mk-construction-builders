@@ -34,25 +34,34 @@ export async function getPublishedPortfolioBySlug(slug, { signal } = {}) {
 
 export async function fetchPublishedPortfolioProject(slug, { signal } = {}) {
   const data = await getPublishedPortfolioBySlug(slug, { signal })
-  return mapPortfolioProject(data)
+  const record =
+    data && typeof data === 'object' && data.project && !data.slug
+      ? data.project
+      : data
+  return mapPortfolioProject(record)
 }
 
 export async function fetchPortfolioProjectsForFilter(filter, { signal } = {}) {
   const query = portfolioQueryFromFilter(filter)
-  const data = await listPublishedPortfolioProjects(
-    { ...query, page: 1, pageSize: 100 },
-    { signal },
-  )
-  let items = mapPortfolioProjects(paginatedItems(data))
-  let total = paginatedTotal(data, items.length)
+  const pageSize = 100
+  let page = 1
+  let collected = []
+  let total = 0
+  let totalPages = 1
 
-  if (total === 0 && (query.type || query.status)) {
-    const probe = await listPublishedPortfolioProjects(
-      { page: 1, pageSize: 1 },
+  do {
+    const data = await listPublishedPortfolioProjects(
+      { ...query, page, pageSize },
       { signal },
     )
-    total = paginatedTotal(probe, 0)
-  }
+    const pageItems = paginatedItems(data)
+    total = paginatedTotal(data, collected.length + pageItems.length)
+    totalPages = data?.total_pages || 1
+    collected = collected.concat(pageItems)
+    page += 1
+  } while (page <= totalPages && collected.length < total)
+
+  let items = mapPortfolioProjects(collected)
 
   if (!query.type && !query.status) {
     items = applyProjectFilter(items, filter)

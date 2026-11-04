@@ -139,7 +139,7 @@ export default function ProjectDetails() {
         <div className="container-arch space-y-10 md:space-y-14 min-w-0">
           {error ? (
             <div className="border border-stone-200 bg-white px-4 py-3 text-sm text-navy-700/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <p>{error} Showing saved project details.</p>
+              <p>{error}</p>
               <button
                 type="button"
                 onClick={reload}

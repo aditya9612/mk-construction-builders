@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fetchPublishedGallery } from '../api/gallery'
-import { galleryItems as staticGalleryItems } from '../data/gallery'
 
 export default function useGallery() {
-  const [items, setItems] = useState(staticGalleryItems)
+  const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
-  const [fromFallback, setFromFallback] = useState(true)
   const [reloadKey, setReloadKey] = useState(0)
 
   const reload = useCallback(() => {
@@ -21,22 +19,14 @@ export default function useGallery() {
     setError('')
 
     fetchPublishedGallery({ signal: controller.signal })
-      .then(({ items: nextItems, total }) => {
+      .then(({ items: nextItems }) => {
         if (!active) return
-        if (total === 0) {
-          setItems(staticGalleryItems)
-          setFromFallback(true)
-          setStatus('success')
-          return
-        }
         setItems(nextItems)
-        setFromFallback(false)
         setStatus('success')
       })
       .catch((err) => {
         if (!active || err?.name === 'AbortError') return
-        setItems(staticGalleryItems)
-        setFromFallback(true)
+        setItems([])
         setError(err?.message || 'Unable to load gallery.')
         setStatus('error')
       })
@@ -51,7 +41,7 @@ export default function useGallery() {
     items,
     loading: status === 'loading',
     error,
-    fromFallback,
+    fromFallback: false,
     reload,
   }
 }

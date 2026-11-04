@@ -45,7 +45,7 @@ export default function GalleryPage() {
         <div className="container-arch">
           {error ? (
             <div className="mb-6 border border-stone-200 bg-white px-4 py-3 text-sm text-navy-700/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <p>{error} Showing saved gallery.</p>
+              <p>{error}</p>
               <button
                 type="button"
                 onClick={reload}
@@ -54,9 +54,12 @@ export default function GalleryPage() {
                 Retry
               </button>
             </div>
-          ) : null}
-          {loading && items.length === 0 ? (
+          ) : loading && items.length === 0 ? (
             <GallerySkeleton />
+          ) : items.length === 0 ? (
+            <div className="border border-dashed border-stone-300 bg-white p-12 text-center text-navy-700/70">
+              No gallery images have been published yet.
+            </div>
           ) : (
             <Gallery items={items} />
           )}

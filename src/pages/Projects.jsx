@@ -35,7 +35,7 @@ export default function Projects() {
       <PageHero
         eyebrow="Portfolio"
         title="Our Projects"
-        subtitle="Construction projects represented across Pune — residential, house, bungalow and commercial work."
+        subtitle="Construction projects represented across Pune — residential, commercial, industrial and renovation work."
         crumbs={[{ label: 'Projects' }]}
       />
       <section className="section-pad">
@@ -47,7 +47,7 @@ export default function Projects() {
           />
           {error ? (
             <div className="mb-6 border border-stone-200 bg-white px-4 py-3 text-sm text-navy-700/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <p>{error} Showing saved portfolio.</p>
+              <p>{error}</p>
               <button
                 type="button"
                 onClick={reload}
@@ -56,12 +56,11 @@ export default function Projects() {
                 Retry
               </button>
             </div>
-          ) : null}
-          {loading ? (
+          ) : loading ? (
             <ProjectGridSkeleton />
           ) : items.length === 0 ? (
             <div className="border border-dashed border-stone-300 p-12 text-center text-navy-700/70">
-              No projects match this filter yet.
+              No published projects match this filter yet.
             </div>
           ) : (
             <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-5">

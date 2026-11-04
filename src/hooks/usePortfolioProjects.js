@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fetchPortfolioProjectsForFilter } from '../api/portfolio'
-import { filterProjects } from '../data/projects'
 
 export default function usePortfolioProjects(filter = 'All') {
-  const [items, setItems] = useState(() => filterProjects(filter))
+  const [items, setItems] = useState([])
   const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
-  const [fromFallback, setFromFallback] = useState(false)
   const [reloadKey, setReloadKey] = useState(0)
 
   const reload = useCallback(() => {
@@ -21,22 +19,14 @@ export default function usePortfolioProjects(filter = 'All') {
     setError('')
 
     fetchPortfolioProjectsForFilter(filter, { signal: controller.signal })
-      .then(({ items: nextItems, total }) => {
+      .then(({ items: nextItems }) => {
         if (!active) return
-        if (total === 0) {
-          setItems(filterProjects(filter))
-          setFromFallback(true)
-          setStatus('success')
-          return
-        }
         setItems(nextItems)
-        setFromFallback(false)
         setStatus('success')
       })
       .catch((err) => {
         if (!active || err?.name === 'AbortError') return
-        setItems(filterProjects(filter))
-        setFromFallback(true)
+        setItems([])
         setError(err?.message || 'Unable to load projects.')
         setStatus('error')
       })
@@ -51,7 +41,7 @@ export default function usePortfolioProjects(filter = 'All') {
     items,
     loading: status === 'loading',
     error,
-    fromFallback,
+    fromFallback: false,
     reload,
   }
 }

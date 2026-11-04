@@ -1,29 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { fetchFeaturedPortfolioProjects } from '../api/portfolio'
-import { projects } from '../data/projects'
 
 const FEATURED_LIMIT = 6
-const staticFeatured = () => projects.slice(0, FEATURED_LIMIT)
 
 export default function useFeaturedPortfolioProjects(limit = FEATURED_LIMIT) {
-  const [items, setItems] = useState(staticFeatured)
+  const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [reloadKey, setReloadKey] = useState(0)
+
+  const reload = useCallback(() => {
+    setReloadKey((key) => key + 1)
+  }, [])
 
   useEffect(() => {
     const controller = new AbortController()
     let active = true
 
     setLoading(true)
+    setError('')
 
     fetchFeaturedPortfolioProjects({ limit, signal: controller.signal })
-      .then(({ items: nextItems, total }) => {
+      .then(({ items: nextItems }) => {
         if (!active) return
-        setItems(total === 0 ? staticFeatured() : nextItems)
+        setItems(nextItems)
         setLoading(false)
       })
       .catch((err) => {
         if (!active || err?.name === 'AbortError') return
-        setItems(staticFeatured())
+        setItems([])
+        setError(err?.message || 'Unable to load projects.')
         setLoading(false)
       })
 
@@ -31,7 +37,7 @@ export default function useFeaturedPortfolioProjects(limit = FEATURED_LIMIT) {
       active = false
       controller.abort()
     }
-  }, [limit])
+  }, [limit, reloadKey])
 
-  return { items, loading }
+  return { items, loading, error, reload }
 }

@@ -1,13 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fetchPublishedPortfolioProject } from '../api/portfolio'
-import { getProjectById } from '../data/projects'
 
 export default function usePortfolioProject(slug) {
-  const fallback = slug ? getProjectById(slug) : undefined
-  const [project, setProject] = useState(fallback)
+  const [project, setProject] = useState(undefined)
   const [status, setStatus] = useState(slug ? 'loading' : 'success')
   const [error, setError] = useState('')
-  const [fromFallback, setFromFallback] = useState(Boolean(fallback))
   const [reloadKey, setReloadKey] = useState(0)
 
   const reload = useCallback(() => {
@@ -17,7 +14,6 @@ export default function usePortfolioProject(slug) {
   useEffect(() => {
     if (!slug) {
       setProject(undefined)
-      setFromFallback(false)
       setError('')
       setStatus('success')
       return undefined
@@ -25,35 +21,20 @@ export default function usePortfolioProject(slug) {
 
     const controller = new AbortController()
     let active = true
-    const local = getProjectById(slug)
 
     setStatus('loading')
     setError('')
-    setProject(local)
-    setFromFallback(Boolean(local))
+    setProject(undefined)
 
     fetchPublishedPortfolioProject(slug, { signal: controller.signal })
       .then((next) => {
         if (!active) return
-        if (next) {
-          setProject(next)
-          setFromFallback(false)
-          setStatus('success')
-          return
-        }
-        setProject(local)
-        setFromFallback(Boolean(local))
+        setProject(next || undefined)
         setStatus('success')
       })
       .catch((err) => {
         if (!active || err?.name === 'AbortError') return
-        setProject(local)
-        setFromFallback(Boolean(local))
-        if (local) {
-          setError(err?.message || 'Unable to load the latest project details.')
-          setStatus('error')
-          return
-        }
+        setProject(undefined)
         if (err?.status === 404) {
           setError('')
           setStatus('success')
@@ -73,7 +54,7 @@ export default function usePortfolioProject(slug) {
     project,
     loading: status === 'loading',
     error,
-    fromFallback,
+    fromFallback: false,
     reload,
   }
 }
