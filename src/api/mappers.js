@@ -217,6 +217,69 @@ export function mapGalleryItems(items) {
   return items.map(mapGalleryItem).filter(Boolean)
 }
 
+function mapServiceFeatures(value) {
+  if (Array.isArray(value)) {
+    return value
+      .map((entry) => {
+        if (entry == null) return ''
+        if (typeof entry === 'string') return entry.trim()
+        return String(
+          firstDefined(entry.title, entry.name, entry.label, entry.text, ''),
+        ).trim()
+      })
+      .filter(Boolean)
+  }
+  if (typeof value === 'string') {
+    const trimmed = value.trim()
+    if (!trimmed) return []
+    if (trimmed.startsWith('[')) {
+      try {
+        return mapServiceFeatures(JSON.parse(trimmed))
+      } catch {
+        return []
+      }
+    }
+    return trimmed
+      .split(/\n|;/)
+      .map((part) => part.trim())
+      .filter(Boolean)
+  }
+  return []
+}
+
+export function mapService(item) {
+  if (!item || typeof item !== 'object') return null
+
+  const id = String(firstDefined(item.slug, item.id, ''))
+  if (!id) return null
+
+  const image = mediaUrl(
+    firstDefined(
+      typeof item.image === 'string' ? item.image : pickMediaPath(item.image),
+      item.image_url,
+      pickMediaPath(item.media),
+      pickMediaPath(item.cover),
+    ),
+  )
+
+  return {
+    id,
+    title: firstDefined(item.title, item.name, 'Service'),
+    description: firstDefined(item.description, ''),
+    features: mapServiceFeatures(item.features),
+    image,
+    displayOrder: Number(item.display_order ?? item.displayOrder ?? 0) || 0,
+  }
+}
+
+export function mapServices(items) {
+  if (!Array.isArray(items)) return []
+  return items
+    .map(mapService)
+    .filter(Boolean)
+    .sort((a, b) => a.displayOrder - b.displayOrder)
+}
+
 export function paginatedItems(data) {
   if (Array.isArray(data)) return data
   if (data && Array.isArray(data.items)) return data.items

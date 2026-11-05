@@ -12,6 +12,8 @@ export {
   mapGalleryItems,
   mapPortfolioProject,
   mapPortfolioProjects,
+  mapService,
+  mapServices,
   paginatedItems,
   paginatedTotal,
   portfolioQueryFromFilter,
@@ -26,3 +28,11 @@ export {
 } from './portfolio'
 
 export { fetchPublishedGallery, listPublishedGallery } from './gallery'
+
+export {
+  fetchFeaturedServices,
+  fetchPublishedService,
+  fetchPublishedServices,
+  getPublishedServiceBySlug,
+  listPublishedServices,
+} from './services'

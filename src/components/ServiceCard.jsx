@@ -19,12 +19,16 @@ export default function ServiceCard({ service, index = 0 }) {
       className="group relative flex flex-col min-w-0 w-full overflow-hidden bg-stone-50 border border-stone-200/80 rounded-[14px] sm:rounded-none hover-lift transition-shadow duration-500 hover:shadow-[var(--shadow-lift)]"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
-        <img
-          src={service.image}
-          alt={`${service.title} — MK Construction & Builders Pune`}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
-        />
+        {service.image ? (
+          <img
+            src={service.image}
+            alt={`${service.title} — MK Construction & Builders Pune`}
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-[1.1s] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
+          />
+        ) : (
+          <div className="h-full w-full bg-stone-200" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950/55 via-transparent to-transparent" />
         <span className="absolute bottom-4 left-4 text-[10px] uppercase tracking-[0.22em] text-gold-300">
           0{index + 1}
@@ -42,8 +46,8 @@ export default function ServiceCard({ service, index = 0 }) {
         </p>
         {service.features?.length > 0 && (
           <ul className="mt-5 space-y-2">
-            {service.features.slice(0, 3).map((f) => (
-              <li key={f} className="text-[12px] text-navy-700/55 flex gap-2.5 tracking-wide">
+            {service.features.slice(0, 3).map((f, featureIndex) => (
+              <li key={`${f}-${featureIndex}`} className="text-[12px] text-navy-700/55 flex gap-2.5 tracking-wide">
                 <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gold-500" />
                 {f}
               </li>

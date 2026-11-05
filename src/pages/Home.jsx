@@ -13,9 +13,24 @@ import ProcessTimeline from '../components/ProcessTimeline'
 import CustomerReviews from '../components/CustomerReviews'
 import { Reveal, ImageReveal } from '../components/motion/Reveal'
 import { company } from '../data/company'
-import { services } from '../data/services'
 import { pageSeo } from '../data/seo'
 import useFeaturedPortfolioProjects from '../hooks/useFeaturedPortfolioProjects'
+import useFeaturedServices from '../hooks/useFeaturedServices'
+
+function FeaturedServiceSkeleton() {
+  return (
+    <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6 mt-10">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div
+          key={index}
+          className="min-w-0 overflow-hidden bg-stone-50 border border-stone-200/80 rounded-[14px] sm:rounded-none"
+        >
+          <div className="aspect-[4/3] animate-pulse bg-stone-200" />
+        </div>
+      ))}
+    </div>
+  )
+}
 
 function FeaturedProjectSkeleton() {
   return (
@@ -39,7 +54,12 @@ export default function Home() {
     error: projectsError,
     reload: reloadProjects,
   } = useFeaturedPortfolioProjects(6)
-  const featuredServices = services.slice(0, 6)
+  const {
+    items: featuredServices,
+    loading: servicesLoading,
+    error: servicesError,
+    reload: reloadServices,
+  } = useFeaturedServices(6)
   const seo = pageSeo.home
 
   return (
@@ -119,13 +139,32 @@ export default function Home() {
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
-          <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6 mt-10">
-            {featuredServices.map((service, index) => (
-              <div key={service.id} className="min-w-0">
-                <ServiceCard service={service} index={index} />
-              </div>
-            ))}
-          </div>
+          {servicesError ? (
+            <div className="mt-10 border border-stone-200 bg-white px-4 py-3 text-sm text-navy-700/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <p>{servicesError}</p>
+              <button
+                type="button"
+                onClick={reloadServices}
+                className="min-h-11 px-4 text-[11px] uppercase tracking-[0.16em] border border-stone-200 hover:border-gold-500 hover:text-gold-600 transition"
+              >
+                Retry
+              </button>
+            </div>
+          ) : servicesLoading && featuredServices.length === 0 ? (
+            <FeaturedServiceSkeleton />
+          ) : featuredServices.length === 0 ? (
+            <div className="mt-10 border border-dashed border-stone-300 bg-white p-12 text-center text-navy-700/70">
+              No published services yet.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6 mt-10">
+              {featuredServices.map((service, index) => (
+                <div key={service.id} className="min-w-0">
+                  <ServiceCard service={service} index={index} />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
