@@ -36,3 +36,13 @@ export {
   getPublishedServiceBySlug,
   listPublishedServices,
 } from './services'
+
+export {
+  fetchFeedbackStatistics,
+  getPublishedFeedbackById,
+  listPublishedFeedback,
+  mapCustomerFeedbackItem,
+  mapCustomerFeedbackStatistics,
+  sanitizeCustomerPhoto,
+  sanitizeExternalUrl,
+} from './customerFeedback'
