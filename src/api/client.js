@@ -1,17 +1,17 @@
 const DEFAULT_API_URL = 'https://api.mkconstruction.site'
 
 function resolveApiBaseUrl() {
-  const raw = import.meta.env.VITE_API_URL
+  const raw = import.meta.env?.VITE_API_URL
   const value = raw == null ? '' : String(raw).trim().replace(/\/$/, '')
   if (value) return value
   // Local empty VITE_API_URL → same-origin /api (Vite proxy). Production keeps the public API.
-  return import.meta.env.DEV ? '' : DEFAULT_API_URL
+  return import.meta.env?.DEV ? '' : DEFAULT_API_URL
 }
 
 export const API_BASE_URL = resolveApiBaseUrl()
 
 export const MEDIA_BASE_URL = (
-  import.meta.env.VITE_MEDIA_URL || DEFAULT_API_URL
+  import.meta.env?.VITE_MEDIA_URL || DEFAULT_API_URL
 ).replace(/\/$/, '')
 
 export class ApiError extends Error {
@@ -69,6 +69,9 @@ function messageFromPayload(payload, fallback) {
   if (Array.isArray(payload.detail) && payload.detail[0]?.msg) {
     return payload.detail[0].msg
   }
+  if (Array.isArray(payload.errors) && payload.errors[0]?.message) {
+    return payload.errors[0].message
+  }
   return fallback
 }
 
@@ -113,4 +116,69 @@ export async function apiGet(path, { params, signal } = {}) {
   }
 
   return unwrapSuccess(payload)
+}
+
+export async function apiPost(path, body, { isFormData = false, signal } = {}) {
+  let response
+
+  const headers = { Accept: 'application/json' }
+  let requestBody = body
+
+  if (!isFormData && body != null && typeof body === 'object') {
+    headers['Content-Type'] = 'application/json'
+    requestBody = JSON.stringify(body)
+  }
+
+  try {
+    response = await fetch(buildUrl(path), {
+      method: 'POST',
+      headers,
+      body: requestBody,
+      signal,
+    })
+  } catch (error) {
+    if (error?.name === 'AbortError') throw error
+    throw new ApiError(
+      'Unable to connect. Please check your internet connection and try again.',
+      { status: 0 },
+    )
+  }
+
+  let payload = null
+  const contentType = response.headers.get('content-type') || ''
+  if (contentType.includes('application/json')) {
+    try {
+      payload = await response.json()
+    } catch {
+      payload = null
+    }
+  }
+
+  if (!response.ok) {
+    if (response.status === 429) {
+      throw new ApiError(
+        'Too many submissions. Please try again after a few minutes.',
+        { status: 429, payload },
+      )
+    }
+    if (response.status >= 500) {
+      throw new ApiError('Something went wrong. Please try again later.', {
+        status: response.status,
+        payload,
+      })
+    }
+    throw new ApiError(
+      messageFromPayload(payload, `Request failed (${response.status})`),
+      { status: response.status, payload },
+    )
+  }
+
+  if (payload && payload.success === false) {
+    throw new ApiError(messageFromPayload(payload, 'Request failed'), {
+      status: response.status,
+      payload,
+    })
+  }
+
+  return payload
 }

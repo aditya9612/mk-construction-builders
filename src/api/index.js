@@ -3,6 +3,7 @@ export {
   MEDIA_BASE_URL,
   ApiError,
   apiGet,
+  apiPost,
   mediaUrl,
 } from './client'
 
@@ -45,4 +46,6 @@ export {
   mapCustomerFeedbackStatistics,
   sanitizeCustomerPhoto,
   sanitizeExternalUrl,
+  submitPublicReview,
+  validateCustomerPhoto,
 } from './customerFeedback'

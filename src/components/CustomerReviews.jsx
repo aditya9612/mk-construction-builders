@@ -11,6 +11,9 @@ import {
   User,
   RefreshCw,
   MessageSquare,
+  MessageSquarePlus,
+  CheckCircle,
+  X,
 } from 'lucide-react'
 import SectionTitle from './SectionTitle'
 import { Reveal } from './motion/Reveal'
@@ -18,6 +21,7 @@ import { fadeUp } from '../motion/variants'
 import { EASE, DURATION } from '../motion/tokens'
 import useCustomerFeedback from '../hooks/useCustomerFeedback'
 import useCustomerFeedbackStatistics from '../hooks/useCustomerFeedbackStatistics'
+import ReviewFormModal from './ReviewFormModal'
 
 const CARD_STAGGER = 0.08
 
@@ -344,7 +348,7 @@ function ReviewsErrorState({ message, onRetry }) {
   )
 }
 
-function EmptyReviewsState() {
+function EmptyReviewsState({ onWriteReview }) {
   return (
     <div className="border border-dashed border-stone-300 bg-white rounded-2xl p-8 sm:p-12 md:p-16 text-center max-w-2xl mx-auto">
       <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-stone-100 border border-stone-200 flex items-center justify-center text-gold-600">
@@ -354,10 +358,18 @@ function EmptyReviewsState() {
         Customer reviews will appear here soon.
       </h3>
       <p className="mt-3 text-sm sm:text-[15px] text-navy-700/70 max-w-lg mx-auto leading-relaxed">
-        We take pride in our work across Pune. Verified client reviews from completed projects will be
-        published here as they are received.
+        We take pride in our work across Pune. Have you built with us? Share your feedback directly
+        to help fellow homeowners.
       </p>
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={onWriteReview}
+          className="btn-primary min-h-11 px-6 text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-2"
+        >
+          <MessageSquarePlus className="w-4 h-4" />
+          Write a Review
+        </button>
         <Link
           to="/projects"
           className="btn-ghost text-xs tracking-wider uppercase min-h-11 px-4 inline-flex items-center"
@@ -407,6 +419,8 @@ export default function CustomerReviews({
   } = useCustomerFeedbackStatistics()
 
   const [activeSort, setActiveSort] = useState('default')
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [submissionSuccess, setSubmissionSuccess] = useState(false)
 
   const handleSortChange = (sortType) => {
     setActiveSort(sortType)
@@ -434,14 +448,66 @@ export default function CustomerReviews({
     reloadStats()
   }
 
-  const hasReviews = reviews.length > 0 || (statistics?.total_published_reviews > 0)
+  const handleReviewSuccess = () => {
+    reloadReviews()
+    reloadStats()
+    setReviewSource(null)
+    setSort('review_date', 'desc')
+    setActiveSort('latest')
+    setPage(1)
+    setSubmissionSuccess(true)
+    setTimeout(() => {
+      setSubmissionSuccess(false)
+    }, 6000)
+  }
+
+  const hasReviews = reviews.length > 0 || statistics?.total_published_reviews > 0
   const isInitialLoading = reviewsLoading && reviews.length === 0 && statsLoading
 
   return (
     <section className={className}>
       <div className="container-arch min-w-0">
-        {showTitle && (
-          <SectionTitle eyebrow={eyebrow} title={title} subtitle={subtitle} />
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-6">
+          {showTitle && (
+            <SectionTitle
+              eyebrow={eyebrow}
+              title={title}
+              subtitle={subtitle}
+              className="mb-0 max-w-2xl"
+            />
+          )}
+
+          {/* Prominent Write a Review CTA button in section header */}
+          <div className="shrink-0 self-start md:self-auto md:mb-4">
+            <button
+              type="button"
+              onClick={() => setIsFormOpen(true)}
+              className="btn-primary min-h-[46px] px-6 text-xs font-semibold uppercase tracking-wider inline-flex items-center gap-2 shadow-[var(--shadow-soft)] hover-lift"
+            >
+              <MessageSquarePlus className="w-4 h-4" />
+              <span>Write a Review</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Global Submission Success Toast */}
+        {submissionSuccess && (
+          <div className="mb-8 border border-emerald-300 bg-emerald-50 text-emerald-950 rounded-xl p-4 flex items-center justify-between gap-3 text-xs sm:text-sm shadow-sm animate-in fade-in duration-300">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
+              <span className="font-medium">
+                Thank you! Your review has been submitted and published successfully.
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setSubmissionSuccess(false)}
+              className="text-emerald-700 hover:text-emerald-900 p-1 rounded-md"
+              aria-label="Dismiss message"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         )}
 
         {/* Loading State */}
@@ -457,7 +523,7 @@ export default function CustomerReviews({
 
         {/* Empty State */}
         {!isInitialLoading && !reviewsError && !hasReviews && (
-          <EmptyReviewsState />
+          <EmptyReviewsState onWriteReview={() => setIsFormOpen(true)} />
         )}
 
         {/* Published Reviews Content */}
@@ -469,7 +535,7 @@ export default function CustomerReviews({
             )}
 
             {/* Filter and Sorting Toolbar */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
               {/* Source Filters */}
               <div className="flex flex-wrap items-center gap-2">
                 <button
@@ -524,7 +590,7 @@ export default function CustomerReviews({
               </div>
 
               {/* Sort selector */}
-              <div className="flex items-center gap-2 self-start sm:self-auto text-xs">
+              <div className="flex items-center gap-2 self-start md:self-auto text-xs">
                 <span className="text-navy-700/60 uppercase tracking-wider text-[10px]">Sort by:</span>
                 <select
                   value={activeSort}
@@ -618,6 +684,13 @@ export default function CustomerReviews({
             </div>
           </Reveal>
         )}
+
+        {/* Review Form Modal */}
+        <ReviewFormModal
+          isOpen={isFormOpen}
+          onClose={() => setIsFormOpen(false)}
+          onSuccess={handleReviewSuccess}
+        />
       </div>
     </section>
   )

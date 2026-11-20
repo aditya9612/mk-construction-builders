@@ -1,4 +1,4 @@
-import { apiGet, mediaUrl } from './client'
+import { apiGet, apiPost, mediaUrl } from './client.js'
 
 const FEEDBACK_PUBLIC_PATH = '/api/v1/customer-feedback/public'
 const STATISTICS_PATH = `${FEEDBACK_PUBLIC_PATH}/statistics`
@@ -186,4 +186,137 @@ export async function getPublishedFeedbackById(feedbackId, { signal } = {}) {
     signal,
   })
   return mapCustomerFeedbackItem(data)
+}
+
+const MAX_PHOTO_SIZE = 5 * 1024 * 1024 // 5 MB
+
+/**
+ * Validates selected customer photo file on the client side.
+ * Supported formats: JPG, JPEG, PNG, WEBP.
+ * Max size: 5 MB.
+ * Rejects: SVG, empty files, unsupported formats.
+ */
+export function validateCustomerPhoto(file) {
+  if (!file) return { valid: true }
+
+  if (file.size === 0) {
+    return { valid: false, error: 'The selected photo is empty.' }
+  }
+
+  if (file.size > MAX_PHOTO_SIZE) {
+    return {
+      valid: false,
+      error: 'Photo size exceeds 5 MB. Please select a smaller photo.',
+    }
+  }
+
+  const name = (file.name || '').toLowerCase()
+  if (name.endsWith('.svg') || file.type === 'image/svg+xml') {
+    return {
+      valid: false,
+      error: 'SVG photos are not allowed for security reasons.',
+    }
+  }
+
+  const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp']
+  const hasAllowedExt = allowedExtensions.some((ext) => name.endsWith(ext))
+  const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/pjpeg']
+  const hasAllowedMime = allowedMimeTypes.includes((file.type || '').toLowerCase())
+
+  if (!hasAllowedExt && !hasAllowedMime) {
+    return {
+      valid: false,
+      error: 'Invalid file format. Allowed formats: JPG, JPEG, PNG, WEBP.',
+    }
+  }
+
+  return { valid: true }
+}
+
+/**
+ * Submit a public customer review for immediate publication.
+ * POST /api/v1/customer-feedback/public/submit
+ * - application/json when without photo
+ * - multipart/form-data when with photo
+ */
+export async function submitPublicReview(
+  {
+    customerName,
+    customerLocation,
+    rating,
+    reviewTitle,
+    reviewMessage,
+    customerPhoto,
+    honeypot = '',
+  } = {},
+  { signal } = {},
+) {
+  const SUBMIT_PATH = `${FEEDBACK_PUBLIC_PATH}/submit`
+
+  if (!customerName || !customerName.trim()) {
+    throw new Error('Please enter your name.')
+  }
+  if (!customerLocation || !customerLocation.trim()) {
+    throw new Error('Please enter your location.')
+  }
+  const numericRating = Number(rating)
+  if (!numericRating || numericRating < 1 || numericRating > 5) {
+    throw new Error('Please select a star rating between 1 and 5.')
+  }
+  if (!reviewMessage || !reviewMessage.trim()) {
+    throw new Error('Please enter your review message.')
+  }
+  if (reviewMessage.trim().length < 10) {
+    throw new Error('Review message must be at least 10 characters.')
+  }
+
+  // Validate photo if provided
+  if (customerPhoto instanceof File) {
+    const photoCheck = validateCustomerPhoto(customerPhoto)
+    if (!photoCheck.valid) {
+      throw new Error(photoCheck.error)
+    }
+
+    const formData = new FormData()
+    formData.append('customer_name', customerName.trim())
+    formData.append('customer_location', customerLocation.trim())
+    formData.append('rating', String(numericRating))
+    if (reviewTitle && reviewTitle.trim()) {
+      formData.append('review_title', reviewTitle.trim())
+    }
+    formData.append('review_message', reviewMessage.trim())
+    formData.append('customer_photo', customerPhoto)
+    formData.append('honeypot', honeypot || '')
+
+    const response = await apiPost(SUBMIT_PATH, formData, { isFormData: true, signal })
+    return {
+      success: true,
+      message:
+        response?.message ||
+        'Thank you! Your review has been submitted and published successfully.',
+      data: mapCustomerFeedbackItem(response?.data),
+    }
+  }
+
+  // JSON submission (without photo)
+  const payload = {
+    customer_name: customerName.trim(),
+    customer_location: customerLocation.trim(),
+    rating: numericRating,
+    review_message: reviewMessage.trim(),
+    honeypot: honeypot || '',
+  }
+
+  if (reviewTitle && reviewTitle.trim()) {
+    payload.review_title = reviewTitle.trim()
+  }
+
+  const response = await apiPost(SUBMIT_PATH, payload, { isFormData: false, signal })
+  return {
+    success: true,
+    message:
+      response?.message ||
+      'Thank you! Your review has been submitted and published successfully.',
+    data: mapCustomerFeedbackItem(response?.data),
+  }
 }
