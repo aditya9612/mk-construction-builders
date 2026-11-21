@@ -31,6 +31,13 @@ export {
 export { fetchPublishedGallery, listPublishedGallery } from './gallery'
 
 export {
+  buildEnquiryBody,
+  createEnquiry,
+  isValidIndianMobile,
+  normalizeIndianMobile,
+} from './enquiries'
+
+export {
   fetchFeaturedServices,
   fetchPublishedService,
   fetchPublishedServices,

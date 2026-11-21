@@ -75,6 +75,19 @@ function messageFromPayload(payload, fallback) {
   return fallback
 }
 
+async function parseJsonResponse(response) {
+  let payload = null
+  const contentType = response.headers.get('content-type') || ''
+  if (contentType.includes('application/json')) {
+    try {
+      payload = await response.json()
+    } catch {
+      payload = null
+    }
+  }
+  return payload
+}
+
 export async function apiGet(path, { params, signal } = {}) {
   let response
 
@@ -91,15 +104,7 @@ export async function apiGet(path, { params, signal } = {}) {
     })
   }
 
-  let payload = null
-  const contentType = response.headers.get('content-type') || ''
-  if (contentType.includes('application/json')) {
-    try {
-      payload = await response.json()
-    } catch {
-      payload = null
-    }
-  }
+  const payload = await parseJsonResponse(response)
 
   if (!response.ok) {
     throw new ApiError(
@@ -118,6 +123,7 @@ export async function apiGet(path, { params, signal } = {}) {
   return unwrapSuccess(payload)
 }
 
+/** Public POST. No Authorization header; credentials omitted. */
 export async function apiPost(path, body, { isFormData = false, signal } = {}) {
   let response
 
@@ -133,36 +139,26 @@ export async function apiPost(path, body, { isFormData = false, signal } = {}) {
     response = await fetch(buildUrl(path), {
       method: 'POST',
       headers,
+      credentials: 'omit',
       body: requestBody,
       signal,
     })
   } catch (error) {
     if (error?.name === 'AbortError') throw error
-    throw new ApiError(
-      'Unable to connect. Please check your internet connection and try again.',
-      { status: 0 },
-    )
+    throw new ApiError('Could not submit. Please try again.', { status: 0 })
   }
 
-  let payload = null
-  const contentType = response.headers.get('content-type') || ''
-  if (contentType.includes('application/json')) {
-    try {
-      payload = await response.json()
-    } catch {
-      payload = null
-    }
-  }
+  const payload = await parseJsonResponse(response)
 
   if (!response.ok) {
     if (response.status === 429) {
-      throw new ApiError(
-        'Too many submissions. Please try again after a few minutes.',
-        { status: 429, payload },
-      )
+      throw new ApiError('Please wait before submitting again.', {
+        status: 429,
+        payload,
+      })
     }
     if (response.status >= 500) {
-      throw new ApiError('Something went wrong. Please try again later.', {
+      throw new ApiError('Could not submit. Please try again.', {
         status: response.status,
         payload,
       })
