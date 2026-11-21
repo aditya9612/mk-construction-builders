@@ -72,6 +72,19 @@ function messageFromPayload(payload, fallback) {
   return fallback
 }
 
+async function parseJsonResponse(response) {
+  let payload = null
+  const contentType = response.headers.get('content-type') || ''
+  if (contentType.includes('application/json')) {
+    try {
+      payload = await response.json()
+    } catch {
+      payload = null
+    }
+  }
+  return payload
+}
+
 export async function apiGet(path, { params, signal } = {}) {
   let response
 
@@ -88,15 +101,7 @@ export async function apiGet(path, { params, signal } = {}) {
     })
   }
 
-  let payload = null
-  const contentType = response.headers.get('content-type') || ''
-  if (contentType.includes('application/json')) {
-    try {
-      payload = await response.json()
-    } catch {
-      payload = null
-    }
-  }
+  const payload = await parseJsonResponse(response)
 
   if (!response.ok) {
     throw new ApiError(
@@ -113,4 +118,43 @@ export async function apiGet(path, { params, signal } = {}) {
   }
 
   return unwrapSuccess(payload)
+}
+
+/** Public JSON POST. No Authorization header; credentials omitted. */
+export async function apiPost(path, body, { signal } = {}) {
+  let response
+
+  try {
+    response = await fetch(buildUrl(path), {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'omit',
+      body: JSON.stringify(body),
+      signal,
+    })
+  } catch (error) {
+    if (error?.name === 'AbortError') throw error
+    throw new ApiError('Could not submit. Please try again.', { status: 0 })
+  }
+
+  const payload = await parseJsonResponse(response)
+
+  if (!response.ok) {
+    throw new ApiError(
+      messageFromPayload(payload, `Request failed (${response.status})`),
+      { status: response.status, payload },
+    )
+  }
+
+  if (payload && payload.success === false) {
+    throw new ApiError(messageFromPayload(payload, 'Request failed'), {
+      status: response.status,
+      payload,
+    })
+  }
+
+  return payload
 }

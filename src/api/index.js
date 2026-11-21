@@ -3,6 +3,7 @@ export {
   MEDIA_BASE_URL,
   ApiError,
   apiGet,
+  apiPost,
   mediaUrl,
 } from './client'
 
@@ -28,6 +29,13 @@ export {
 } from './portfolio'
 
 export { fetchPublishedGallery, listPublishedGallery } from './gallery'
+
+export {
+  buildEnquiryBody,
+  createEnquiry,
+  isValidIndianMobile,
+  normalizeIndianMobile,
+} from './enquiries'
 
 export {
   fetchFeaturedServices,
