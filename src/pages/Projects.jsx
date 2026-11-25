@@ -1,11 +1,16 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import Seo from '../components/Seo'
 import PageHero from '../components/PageHero'
 import ProjectCard from '../components/ProjectCard'
 import ProjectFilter from '../components/ProjectFilter'
 import { projectFilters } from '../data/projects'
+import {
+  locationKey,
+  projectMatchesLocation,
+  resolveProjectLocality,
+} from '../data/locations'
 import { pageSeo } from '../data/seo'
 import usePortfolioProjects from '../hooks/usePortfolioProjects'
 
@@ -25,9 +30,33 @@ function ProjectGridSkeleton() {
 }
 
 export default function Projects() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const locationFilter = searchParams.get('location') || ''
   const [active, setActive] = useState('All')
   const { items, loading, error, reload } = usePortfolioProjects(active)
   const seo = pageSeo.projects
+
+  const visibleItems = useMemo(() => {
+    if (!locationFilter) return items
+    return items.filter((project) => projectMatchesLocation(project, locationFilter))
+  }, [items, locationFilter])
+
+  const locationName = useMemo(() => {
+    if (!locationFilter) return ''
+    const match = items.find((project) =>
+      projectMatchesLocation(project, locationFilter),
+    )
+    return (
+      resolveProjectLocality(match?.location)?.name ||
+      locationKey(locationFilter).replace(/-/g, ' ')
+    )
+  }, [items, locationFilter])
+
+  const clearLocationFilter = () => {
+    const next = new URLSearchParams(searchParams)
+    next.delete('location')
+    setSearchParams(next, { replace: true })
+  }
 
   return (
     <>
@@ -45,6 +74,22 @@ export default function Projects() {
             active={active}
             onChange={setActive}
           />
+          {locationFilter ? (
+            <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border border-stone-200 bg-white px-4 py-3 text-sm text-navy-700/80">
+              <p>
+                Showing projects in{' '}
+                <span className="font-medium text-navy-900">{locationName || locationFilter}</span>
+                , Pune
+              </p>
+              <button
+                type="button"
+                onClick={clearLocationFilter}
+                className="min-h-11 px-4 text-[11px] uppercase tracking-[0.16em] border border-stone-200 hover:border-gold-500 hover:text-gold-600 transition"
+              >
+                All locations
+              </button>
+            </div>
+          ) : null}
           {error ? (
             <div className="mb-6 border border-stone-200 bg-white px-4 py-3 text-sm text-navy-700/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <p>{error}</p>
@@ -58,14 +103,14 @@ export default function Projects() {
             </div>
           ) : loading ? (
             <ProjectGridSkeleton />
-          ) : items.length === 0 ? (
+          ) : visibleItems.length === 0 ? (
             <div className="border border-dashed border-stone-300 p-12 text-center text-navy-700/70">
               No published projects match this filter yet.
             </div>
           ) : (
             <div className="grid grid-cols-1 min-[480px]:grid-cols-2 xl:grid-cols-3 gap-5">
               <AnimatePresence mode="popLayout">
-                {items.map((project, index) => (
+                {visibleItems.map((project, index) => (
                   <div key={project.id} className="min-w-0">
                     <ProjectCard project={project} index={index} />
                   </div>
