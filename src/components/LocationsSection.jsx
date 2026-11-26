@@ -1,14 +1,16 @@
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'framer-motion'
 import { MapPin } from 'lucide-react'
-import { locations, businessLocation } from '../data/locations'
+import { businessLocation } from '../data/locations'
 import SectionTitle from './SectionTitle'
 import { Reveal } from './motion/Reveal'
 import { fadeUp } from '../motion/variants'
 import { STAGGER } from '../motion/tokens'
+import useProjectLocations from '../hooks/useProjectLocations'
 
 export default function LocationsSection() {
   const reduceMotion = useReducedMotion()
+  const { locations, loading } = useProjectLocations()
 
   return (
     <section className="section-pad bg-stone-50">
@@ -21,24 +23,41 @@ export default function LocationsSection() {
         />
 
         <div className="flex flex-wrap justify-center gap-2.5 md:gap-3">
-          {locations.map((loc, index) => (
-            <motion.div
-              key={loc.id}
-              variants={fadeUp}
-              custom={index * STAGGER.fast}
-              initial={reduceMotion ? false : 'hidden'}
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <Link
-                to="/projects"
-                className="inline-flex items-center gap-2 border border-stone-200 bg-white px-4 py-2.5 text-[13px] text-navy-800 hover:border-gold-500 hover:text-gold-600 hover:-translate-y-0.5 transition-all duration-300"
+          {loading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <span
+                key={index}
+                className="inline-flex h-[42px] w-28 animate-pulse border border-stone-200 bg-white"
+              />
+            ))
+          ) : locations.length === 0 ? (
+            <p className="text-[14px] text-navy-700/65">
+              Project locations will appear here once published.
+            </p>
+          ) : (
+            locations.map((loc, index) => (
+              <motion.div
+                key={loc.id}
+                variants={fadeUp}
+                custom={index * STAGGER.fast}
+                initial={reduceMotion ? false : 'hidden'}
+                whileInView="visible"
+                viewport={{ once: true }}
               >
-                <MapPin className="h-3.5 w-3.5 text-gold-500" />
-                {loc.name}
-              </Link>
-            </motion.div>
-          ))}
+                <Link
+                  to={
+                    loc.projectCount === 1
+                      ? `/projects/${loc.projectId}`
+                      : `/projects?location=${encodeURIComponent(loc.id)}`
+                  }
+                  className="inline-flex items-center gap-2 border border-stone-200 bg-white px-4 py-2.5 text-[13px] text-navy-800 hover:border-gold-500 hover:text-gold-600 hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  <MapPin className="h-3.5 w-3.5 text-gold-500" />
+                  {loc.name}
+                </Link>
+              </motion.div>
+            ))
+          )}
         </div>
 
         <Reveal direction="up" delay={0.1} className="mt-12 md:mt-14 border border-stone-200 bg-white p-6 sm:p-8 md:p-10 text-center rounded-[14px] sm:rounded-none hover-lift min-w-0">
