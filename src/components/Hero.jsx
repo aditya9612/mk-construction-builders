@@ -3,8 +3,9 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 import { ArrowRight, Phone, MessageCircle } from 'lucide-react'
 import { company } from '../data/company'
 import { getEnquiryMessage, isWhatsAppConfigured, openWhatsApp } from '../utils/whatsapp'
-import { fadeUp, heroBackground, lineReveal } from '../motion/variants'
+import { fadeUp, lineReveal } from '../motion/variants'
 import { EASE, DURATION } from '../motion/tokens'
+import HeroSlideshow from './HeroSlideshow'
 
 export default function Hero() {
   const reduceMotion = useReducedMotion()
@@ -22,23 +23,16 @@ export default function Hero() {
 
   return (
     <section className="hero-section relative flex items-end bg-navy-950">
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <motion.div
           className="h-full w-full"
           style={reduceMotion ? undefined : { y: bgY, scale: bgScale }}
         >
-          <motion.img
-            src={company.images.hero}
-            alt="Modern residential construction project by MK Construction & Builders in Pune"
-            className="h-full w-full object-cover object-center max-md:object-[center_30%]"
-            variants={heroBackground}
-            initial={reduceMotion ? false : 'hidden'}
-            animate="visible"
-          />
+          <HeroSlideshow reducedMotion={Boolean(reduceMotion)} />
         </motion.div>
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,10,16,0.55)_0%,rgba(5,10,16,0.72)_42%,rgba(5,10,16,0.94)_100%)] md:bg-[linear-gradient(105deg,rgba(5,10,16,0.92)_0%,rgba(5,10,16,0.72)_42%,rgba(5,10,16,0.35)_100%)]" />
-        <div className="absolute inset-0 hidden md:block bg-gradient-to-t from-navy-950 via-navy-950/25 to-navy-950/20" />
-        <div className="absolute inset-0 grain" />
+        <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(5,10,16,0.62)_0%,rgba(5,10,16,0.74)_44%,rgba(5,10,16,0.95)_100%)] md:bg-[linear-gradient(105deg,rgba(5,10,16,0.93)_0%,rgba(5,10,16,0.76)_44%,rgba(5,10,16,0.42)_100%)]" />
+        <div className="absolute inset-0 z-10 hidden md:block bg-gradient-to-t from-navy-950 via-navy-950/30 to-navy-950/35" />
+        <div className="absolute inset-0 z-10 grain" />
       </div>
 
       <motion.div

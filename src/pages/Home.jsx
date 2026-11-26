@@ -11,6 +11,7 @@ import QualitySection from '../components/QualitySection'
 import LocationsSection from '../components/LocationsSection'
 import ProcessTimeline from '../components/ProcessTimeline'
 import CustomerReviews from '../components/CustomerReviews'
+import InstagramReels from '../components/InstagramReels'
 import { Reveal, ImageReveal } from '../components/motion/Reveal'
 import { company } from '../data/company'
 import { pageSeo } from '../data/seo'
@@ -222,6 +223,8 @@ export default function Home() {
       </section>
 
       <CustomerReviews />
+
+      <InstagramReels />
 
       <section className="section-pad bg-stone-50">
         <div className="container-arch">
