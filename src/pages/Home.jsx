@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import { useReducedMotion } from 'framer-motion'
 import Hero from '../components/Hero'
 import Seo from '../components/Seo'
 import SectionTitle from '../components/SectionTitle'
@@ -44,6 +46,80 @@ function FeaturedProjectSkeleton() {
           <div className="aspect-[4/3] animate-pulse bg-navy-800" />
         </div>
       ))}
+    </div>
+  )
+}
+
+const ABOUT_SLIDES = [
+  {
+    src: '/images/about/about-design.jpg',
+    alt: `${company.name} modern residential house 3D elevation design in Pune`,
+    objectPosition: 'center 46%',
+  },
+  {
+    src: '/images/about/about-construction.jpg',
+    alt: `${company.name} ongoing residential building construction project in Pune`,
+    objectPosition: 'center 22%',
+  },
+]
+
+const ABOUT_SLIDE_INTERVAL_MS = 4000
+
+/**
+ * Two-image automatic crossfade slideshow for the homepage About section.
+ * Switches every 4 seconds, pauses on hover, and respects prefers-reduced-motion.
+ */
+function AboutImageSlideshow() {
+  const prefersReducedMotion = useReducedMotion()
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+
+  useEffect(() => {
+    if (prefersReducedMotion || isPaused) return undefined
+
+    const intervalId = window.setInterval(() => {
+      if (!document.hidden) {
+        setActiveIndex((prev) => (prev + 1) % ABOUT_SLIDES.length)
+      }
+    }, ABOUT_SLIDE_INTERVAL_MS)
+
+    return () => {
+      window.clearInterval(intervalId)
+    }
+  }, [prefersReducedMotion, isPaused])
+
+  const currentIndex = prefersReducedMotion ? 0 : activeIndex
+
+  return (
+    <div
+      className="relative aspect-[4/3] w-full overflow-hidden bg-stone-200"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {ABOUT_SLIDES.map((slide, index) => {
+        const isActive = index === currentIndex
+        return (
+          <div
+            key={slide.src}
+            aria-hidden={!isActive}
+            className={`absolute inset-0 ${
+              prefersReducedMotion
+                ? ''
+                : 'transition-opacity duration-700 ease-in-out'
+            } ${isActive ? 'opacity-100 z-[1]' : 'opacity-0 z-0 pointer-events-none'}`}
+          >
+            <img
+              src={slide.src}
+              alt={slide.alt}
+              className="w-full h-full object-cover"
+              style={{ objectPosition: slide.objectPosition }}
+              loading="eager"
+              decoding="async"
+              draggable={false}
+            />
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -109,14 +185,7 @@ export default function Home() {
               </div>
             </Reveal>
             <ImageReveal direction="right" className="arch-frame min-w-0 w-full">
-              <div className="aspect-[4/3] w-full">
-                <img
-                  src={company.images.about}
-                  alt={`${company.name} residential building project in Pune`}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-              </div>
+              <AboutImageSlideshow />
             </ImageReveal>
           </div>
         </div>
